@@ -1,1 +1,1 @@
-from .cost_funcs import CostFunc
+from .cost_funcs import CostFunc, CrossEntropy, MeanSquaredError

@@ -18,7 +18,7 @@ class ReLU(ActivationFunc):
         return np.maximum(vector, 0)
 
     def derivative(self, vector: NDArray) -> NDArray:
-        return np.where(vector > 0, 1, 0)
+        return np.diag(np.where(vector > 0, 1, 0))
 
 
 class Softmax(ActivationFunc):
@@ -27,8 +27,8 @@ class Softmax(ActivationFunc):
         return exp / np.sum(exp)
 
     def derivative(self, vector: NDArray) -> NDArray:
-        softmax: NDArray = self.compute(vector)
-        return softmax * (1 - softmax)
+        softmax: NDArray = self.compute(vector).reshape(-1, 1)
+        return np.diagflat(softmax) - np.dot(softmax, softmax.T)  # Jacobian matrix
 
 
 class Sigmoid(ActivationFunc):
@@ -37,7 +37,7 @@ class Sigmoid(ActivationFunc):
 
     def derivative(self, vector: NDArray) -> NDArray:
         sigmoid: NDArray = self.compute(vector)
-        return sigmoid * (1 - sigmoid)
+        return np.diag(sigmoid * (1 - sigmoid))
 
 
 class Tanh(ActivationFunc):
@@ -45,7 +45,7 @@ class Tanh(ActivationFunc):
         return np.tanh(vector)
 
     def derivative(self, vector: NDArray) -> NDArray:
-        return 1 - np.tanh(vector) ** 2
+        return np.diag(1 - np.tanh(vector) ** 2)
 
 
 class SiLU(ActivationFunc):
@@ -54,7 +54,7 @@ class SiLU(ActivationFunc):
 
     def derivative(self, vector: NDArray) -> NDArray:
         sigmoid: NDArray = 1 / (1 + np.exp(-vector))
-        return sigmoid + (vector * sigmoid * (1 - sigmoid))
+        return np.diag(sigmoid + (vector * sigmoid * (1 - sigmoid)))
 
 
 class Softplus(ActivationFunc):
@@ -62,7 +62,7 @@ class Softplus(ActivationFunc):
         return np.log(1 + np.exp(vector))
 
     def derivative(self, vector: NDArray) -> NDArray:
-        return 1 / (1 + np.exp(-vector))
+        return np.diag(1 / (1 + np.exp(-vector)))
 
 
 class BinaryStep(ActivationFunc):
@@ -70,7 +70,7 @@ class BinaryStep(ActivationFunc):
         return np.where(vector >= 0, 1, 0)
 
     def derivative(self, vector: NDArray) -> NDArray:
-        return np.zeros_like(vector)
+        return np.diag(np.zeros_like(vector))
 
 
 class Identity(ActivationFunc):
@@ -78,4 +78,4 @@ class Identity(ActivationFunc):
         return vector
 
     def derivative(self, vector: NDArray) -> NDArray:
-        return np.ones_like(vector)
+        return np.diag(np.ones_like(vector))
