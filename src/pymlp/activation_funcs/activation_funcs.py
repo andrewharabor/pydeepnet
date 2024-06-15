@@ -73,7 +73,7 @@ class BinaryStep(ActivationFunc):
         return np.diag(np.zeros_like(vector))
 
 
-class Identity(ActivationFunc):
+class Linear(ActivationFunc):
     def compute(self, vector: NDArray) -> NDArray:
         return vector
 
