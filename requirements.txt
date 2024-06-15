@@ -1,0 +1,6 @@
+autopep8
+ipython
+isort
+numpy
+scipy
+tensorflow
