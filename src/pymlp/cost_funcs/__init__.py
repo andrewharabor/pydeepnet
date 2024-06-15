@@ -1,2 +1,2 @@
-from .cost_funcs import (CostFunc, CrossEntropy, LogCosh, MeanAbsoluteError,
-                         MeanSquaredError)
+from .cost_funcs import (CostFunc, CrossEntropy, Huber, LogCosh,
+                         MeanAbsoluteError, MeanSquaredError)
