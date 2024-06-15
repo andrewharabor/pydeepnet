@@ -1,1 +1,1 @@
-from .costfuncs import *
+from .costfuncs import CostFunc

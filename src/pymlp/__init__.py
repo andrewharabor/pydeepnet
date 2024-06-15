@@ -1,1 +1,1 @@
-from .pymlp import *
+from .pymlp import NeuralNetwork

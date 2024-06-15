@@ -1,1 +1,1 @@
-from .normalizers import *
+from .normalizers import Normalizer

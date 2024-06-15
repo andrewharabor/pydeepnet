@@ -1,1 +1,1 @@
-from .activationfuncs import *
+from .activationfuncs import ActivationFunc

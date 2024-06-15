@@ -1,1 +1,1 @@
-from .regularizers import *
+from .regularizers import Regularizer
