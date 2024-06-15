@@ -3,5 +3,79 @@ from __future__ import annotations
 from pymlp.typing import *
 
 
-class ActivationFunc:
-    pass
+class ActivationFunc(ABC):
+    @abstractmethod
+    def compute(self, vector: NDArray) -> NDArray:
+        pass
+
+    @abstractmethod
+    def derivative(self, vector: NDArray) -> NDArray:
+        pass
+
+
+class ReLU(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        return np.maximum(vector, 0)
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        return np.where(vector > 0, 1, 0)
+
+
+class Softmax(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        exp: NDArray = np.exp(vector - np.max(vector))
+        return exp / np.sum(exp)
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        softmax: NDArray = self.compute(vector)
+        return softmax * (1 - softmax)
+
+
+class Sigmoid(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        return 1 / (1 + np.exp(-vector))
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        sigmoid: NDArray = self.compute(vector)
+        return sigmoid * (1 - sigmoid)
+
+
+class Tanh(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        return np.tanh(vector)
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        return 1 - np.tanh(vector) ** 2
+
+
+class SiLU(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        return vector / (1 + np.exp(-vector))
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        sigmoid: NDArray = 1 / (1 + np.exp(-vector))
+        return sigmoid + (vector * sigmoid * (1 - sigmoid))
+
+
+class Softplus(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        return np.log(1 + np.exp(vector))
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        return 1 / (1 + np.exp(-vector))
+
+
+class BinaryStep(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        return np.where(vector >= 0, 1, 0)
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        return np.zeros_like(vector)
+
+
+class Identity(ActivationFunc):
+    def compute(self, vector: NDArray) -> NDArray:
+        return vector
+
+    def derivative(self, vector: NDArray) -> NDArray:
+        return np.ones_like(vector)

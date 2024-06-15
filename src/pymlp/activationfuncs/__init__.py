@@ -1,1 +1,2 @@
-from .activationfuncs import ActivationFunc
+from .activationfuncs import (ActivationFunc, BinaryStep, Identity, ReLU,
+                              Sigmoid, SiLU, Softmax, Softplus, Tanh)
