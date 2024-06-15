@@ -14,11 +14,16 @@ class ActivationFunc(ABC):
 
 
 class ReLU(ActivationFunc):
+    leak: Float64  # for leaky ReLU
+
+    def __init__(self, leak: Float64=Float64(0.0)):
+        self.leak = leak
+
     def compute(self, vector: NDArray) -> NDArray:
-        return np.maximum(vector, 0)
+        return np.maximum(vector, self.leak * vector)
 
     def derivative(self, vector: NDArray) -> NDArray:
-        return np.diag(np.where(vector > 0, 1, 0))
+        return np.diag(np.where(vector > 0, 1, self.leak))
 
 
 class Softmax(ActivationFunc):
