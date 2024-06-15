@@ -11,4 +11,4 @@ import scipy as sp
 # import tensorflow as tf
 
 Float64: TypeAlias = np.float64
-NDArray: TypeAlias = npt.NDArray[Float64 | Any]
+NDArray: TypeAlias = np.ndarray[Any, np.dtype[Float64]]
