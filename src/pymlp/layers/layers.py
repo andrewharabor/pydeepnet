@@ -1,7 +1,6 @@
-from __future__ import annotations
 
 from pymlp.typing import *
 
 
-class Layer:
+class Layer(ABC):
     pass
