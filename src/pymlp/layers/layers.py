@@ -41,12 +41,13 @@ class DenseHiddenLayer(Layer):
         self.nodes = nodes
         self.activation_func = activation_func
 
-    def initialize_weights(self, prev_nodes: int) -> None:
-        # FIXME: go back to random initialization when done testing
-        # self.weights = np.random.randn(self.nodes, prev_nodes)
-        # self.biases = np.random.randn(self.nodes)
-        self.weights = np.zeros((self.nodes, prev_nodes))
-        self.biases = np.zeros(self.nodes)
+    def initialize_weights(self, prev_nodes: int, to_zeros: bool = False) -> None:
+        if to_zeros:
+            self.weights = np.zeros((self.nodes, prev_nodes))
+            self.biases = np.zeros(self.nodes)
+        else:
+            self.weights = np.random.randn(self.nodes, prev_nodes)
+            self.biases = np.random.randn(self.nodes)
 
     def forward_propagation(self, inputs: NDArray) -> NDArray:
         self.inputs = inputs
