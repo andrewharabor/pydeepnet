@@ -27,7 +27,7 @@ class InputLayer(Layer):
         return np.zeros(self.size)  # No back propagation for input layer
 
 
-class DenseHiddenLayer(Layer):
+class DenseLayer(Layer):
     nodes: int
     activation_func: ActivationFunc
     weights: NDArray
@@ -41,13 +41,13 @@ class DenseHiddenLayer(Layer):
         self.nodes = nodes
         self.activation_func = activation_func
 
-    def initialize_weights(self, prev_nodes: int, to_zeros: bool = False) -> None:
-        if to_zeros:
-            self.weights = np.zeros((self.nodes, prev_nodes))
-            self.biases = np.zeros(self.nodes)
-        else:
-            self.weights = np.random.randn(self.nodes, prev_nodes)
-            self.biases = np.random.randn(self.nodes)
+    def initialize_weights(self, prev_nodes: int) -> None:
+        self.weights = np.random.normal(size=(self.nodes, prev_nodes))
+        self.biases = np.random.normal(size=self.nodes)
+
+    def initialize_gradients(self) -> None:
+        self.weights_gradient = np.zeros(self.weights.shape)
+        self.biases_gradient = np.zeros(self.biases.shape)
 
     def forward_propagation(self, inputs: NDArray) -> NDArray:
         self.inputs = inputs
@@ -55,16 +55,15 @@ class DenseHiddenLayer(Layer):
         return self.activation_func.compute(self.weighted_inputs)
 
     def back_propagation(self, prev_derivative: NDArray) -> NDArray:
-        # FIXME: average across all derivatives from next layer
         # Derivative of activation function w.r.t weighted inputs (times previous derivative due to chain rule)
         activation_derivative: NDArray = prev_derivative @ self.activation_func.derivative(self.weighted_inputs)
         # Derivative of activation w.r.t. weights and biases
-        self.weights_gradient = np.outer(activation_derivative, self.inputs)
-        self.biases_gradient = activation_derivative
+        self.weights_gradient += np.outer(activation_derivative, self.inputs)
+        self.biases_gradient += activation_derivative
         return activation_derivative @ self.weights  # Derivative of activation w.r.t. inputs
 
 
-class DenseOutputLayer(DenseHiddenLayer):
+class DenseOutputLayer(DenseLayer):
     cost_func: CostFunc
 
     def __init__(self, nodes: int, activation_func: ActivationFunc, cost_func: CostFunc):

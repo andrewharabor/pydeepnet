@@ -21,10 +21,7 @@ class MeanSquaredError(CostFunc):
 
 
 class CrossEntropy(CostFunc):
-    offset: Float64 # to avoid logarithm of or division by zero
-
-    def __init__(self, offset: Float64=Float64(1e-9)):
-        self.offset = offset
+    offset: Float64 = Float64(1e-9)  # to avoid logarithm of or division by zero
 
     def compute(self, predicted: NDArray, expected: NDArray) -> Float64:
         return -np.sum(expected * np.log(predicted + self.offset))
@@ -52,7 +49,7 @@ class LogCosh(CostFunc):
 class Huber(CostFunc):
     threshold: Float64  # threshold for quadratic and linear parts
 
-    def __init__(self, threshold: Float64=Float64(1.0)):
+    def __init__(self, threshold: Float64 = Float64(1.0)):
         self.threshold = threshold
 
     def compute(self, predicted: NDArray, expected: NDArray) -> Float64:

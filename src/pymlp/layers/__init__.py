@@ -1,1 +1,1 @@
-from .layers import DenseHiddenLayer, DenseOutputLayer, InputLayer, Layer
+from .layers import DenseLayer, DenseOutputLayer, InputLayer, Layer
