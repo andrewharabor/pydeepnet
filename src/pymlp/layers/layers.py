@@ -1,6 +1,7 @@
 
 from pymlp.activation_funcs import *
 from pymlp.cost_funcs import *
+from pymlp.regularizers import *
 from pymlp.typing import *
 
 
@@ -15,21 +16,22 @@ class Layer(ABC):
 
 
 class InputLayer(Layer):
-    size: int
+    nodes: int
 
-    def __init__(self, size: int):
-        self.size = size
+    def __init__(self, nodes: int) -> None:
+        self.nodes = nodes
 
     def forward_propagation(self, inputs: NDArray) -> NDArray:
         return inputs
 
     def back_propagation(self, prev_derivative: NDArray) -> NDArray:
-        return np.zeros(self.size)  # No back propagation for input layer
+        return np.zeros(self.nodes)  # No back propagation for input layer
 
 
 class DenseLayer(Layer):
     nodes: int
     activation_func: ActivationFunc
+    regularizer: Regularizer
     weights: NDArray
     biases: NDArray
     inputs: NDArray
@@ -37,9 +39,10 @@ class DenseLayer(Layer):
     weights_gradient: NDArray
     biases_gradient: NDArray
 
-    def __init__(self, nodes: int, activation_func: ActivationFunc):
+    def __init__(self, nodes: int, activation_func: ActivationFunc, regularizer: Regularizer) -> None:
         self.nodes = nodes
         self.activation_func = activation_func
+        self.regularizer = regularizer
 
     def initialize_weights(self, prev_nodes: int) -> None:
         self.weights = np.random.normal(size=(self.nodes, prev_nodes))
@@ -58,7 +61,7 @@ class DenseLayer(Layer):
         # Derivative of activation function w.r.t weighted inputs (times previous derivative due to chain rule)
         activation_derivative: NDArray = prev_derivative @ self.activation_func.derivative(self.weighted_inputs)
         # Derivative of activation w.r.t. weights and biases
-        self.weights_gradient += np.outer(activation_derivative, self.inputs)
+        self.weights_gradient += np.outer(activation_derivative, self.inputs) + self.regularizer.derivative(self.weights)
         self.biases_gradient += activation_derivative
         return activation_derivative @ self.weights  # Derivative of activation w.r.t. inputs
 
@@ -66,8 +69,8 @@ class DenseLayer(Layer):
 class DenseOutputLayer(DenseLayer):
     cost_func: CostFunc
 
-    def __init__(self, nodes: int, activation_func: ActivationFunc, cost_func: CostFunc):
-        super().__init__(nodes, activation_func)
+    def __init__(self, nodes: int, activation_func: ActivationFunc, regularizer: Regularizer, cost_func: CostFunc) -> None:
+        super().__init__(nodes, activation_func, regularizer)
         self.cost_func = cost_func
 
     def start_back_propagation(self, targets: NDArray) -> NDArray:
