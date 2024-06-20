@@ -15,7 +15,7 @@ class ActivationFunc(ABC):
 class ReLU(ActivationFunc):
     leak: Float64  # for leaky ReLU
 
-    def __init__(self, leak: Float64 = Float64(0.0)):
+    def __init__(self, leak: Float64 = Float64(0.0)) -> None:
         self.leak = leak
 
     def compute(self, vector: NDArray) -> NDArray:

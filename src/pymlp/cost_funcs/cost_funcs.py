@@ -49,7 +49,7 @@ class LogCosh(CostFunc):
 class Huber(CostFunc):
     threshold: Float64  # threshold for quadratic and linear parts
 
-    def __init__(self, threshold: Float64 = Float64(1.0)):
+    def __init__(self, threshold: Float64) -> None:
         self.threshold = threshold
 
     def compute(self, predicted: NDArray, expected: NDArray) -> Float64:
