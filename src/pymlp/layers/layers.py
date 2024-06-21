@@ -1,6 +1,7 @@
 
 from pymlp.activation_funcs import *
 from pymlp.cost_funcs import *
+from pymlp.normalizers import *
 from pymlp.regularizers import *
 from pymlp.typing import *
 
@@ -17,12 +18,14 @@ class Layer(ABC):
 
 class InputLayer(Layer):
     nodes: int
+    normalizer: Normalizer
 
-    def __init__(self, nodes: int) -> None:
+    def __init__(self, nodes: int, normalizer: Normalizer) -> None:
         self.nodes = nodes
+        self.normalizer = normalizer
 
     def forward_propagation(self, inputs: NDArray) -> NDArray:
-        return inputs
+        return self.normalizer.transform(inputs)
 
     def back_propagation(self, prev_derivative: NDArray) -> NDArray:
         return np.zeros(self.nodes)  # No back propagation for input layer

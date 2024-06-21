@@ -1,1 +1,1 @@
-from .normalizers import Normalizer
+from .normalizers import DecimalScaling, MinMax, Normalizer, ZScore
