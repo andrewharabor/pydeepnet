@@ -16,7 +16,7 @@ class L2Norm(Regularizer):
     penalty: Float64
 
     def __init__(self, penalty: Float64) -> None:
-        self.penalty: Float64 = penalty
+        self.penalty = penalty
 
     def compute(self, weights: NDArray) -> Float64:
         return self.penalty / 2 * np.sum(weights ** 2)
@@ -29,7 +29,7 @@ class L1Norm(Regularizer):
     penalty: Float64
 
     def __init__(self, penalty: Float64) -> None:
-        self.penalty: Float64 = penalty
+        self.penalty = penalty
 
     def compute(self, weights: NDArray) -> Float64:
         return self.penalty * np.sum(np.abs(weights))
@@ -43,8 +43,8 @@ class ElasticNet(Regularizer):
     l2_regularizer: L2Norm
 
     def __init__(self, l1_penalty: Float64, l2_penalty: Float64) -> None:
-        self.l1_regularizer: L1Norm = L1Norm(l1_penalty)
-        self.l2_regularizer: L2Norm = L2Norm(l2_penalty)
+        self.l1_regularizer = L1Norm(l1_penalty)
+        self.l2_regularizer = L2Norm(l2_penalty)
 
     def compute(self, weights: NDArray) -> Float64:
         return self.l1_regularizer.compute(weights) + self.l2_regularizer.compute(weights)

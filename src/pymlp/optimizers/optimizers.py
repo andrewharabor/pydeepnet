@@ -17,7 +17,7 @@ class GradientDescent(Optimizer):
     learning_rate: Float64
 
     def __init__(self, learning_rate: Float64) -> None:
-        self.learning_rate: Float64 = learning_rate
+        self.learning_rate = learning_rate
 
     def initialize(self, layers: list[DenseLayer]) -> None:
         return
@@ -40,15 +40,10 @@ class Adam(Optimizer):
 
     def __init__(self, learning_rate: Float64, decay_rate1: Float64, decay_rate2: Float64) -> None:
         self.learning_rate: Float64 = learning_rate
-        self.decay_rate1: Float64 = decay_rate1
-        self.decay_rate2: Float64 = decay_rate2
-        self.weights_momentums: list[NDArray] = []
-        self.biases_momentums: list[NDArray] = []
-        self.weights_velocities: list[NDArray] = []
-        self.biases_velocities: list[NDArray] = []
+        self.decay_rate1 = decay_rate1
+        self.decay_rate2 = decay_rate2
 
     def initialize(self, layers: list[DenseLayer]) -> None:
-        # Ensure momentum and velocity arrays are empty before appending
         self.weights_momentums = []
         self.biases_momentums = []
         self.weights_velocities = []
@@ -77,13 +72,10 @@ class RMSProp(Optimizer):
     error: Float64 = Float64(1e-9)
 
     def __init__(self, learning_rate: Float64, decay_rate: Float64) -> None:
-        self.learning_rate: Float64 = learning_rate
-        self.decay_rate: Float64 = decay_rate
-        self.weights_history: list[NDArray] = []
-        self.biases_history: list[NDArray] = []
+        self.learning_rate = learning_rate
+        self.decay_rate = decay_rate
 
     def initialize(self, layers: list[DenseLayer]) -> None:
-        # Ensure history arrays are empty before appending
         self.weights_history = []
         self.biases_history = []
         for layer in layers:
@@ -105,13 +97,10 @@ class Momentum(Optimizer):
     biases_velocities: list[NDArray]
 
     def __init__(self, learning_rate: Float64, momentum: Float64) -> None:
-        self.learning_rate: Float64 = learning_rate
-        self.momentum: Float64 = momentum
-        self.weights_velocities: list[NDArray] = []
-        self.biases_velocities: list[NDArray] = []
+        self.learning_rate = learning_rate
+        self.momentum = momentum
 
     def initialize(self, layers: list[DenseLayer]) -> None:
-        # Ensure velocity arrays are empty before appending
         self.weights_velocities = []
         self.biases_velocities = []
         for layer in layers:
