@@ -23,7 +23,10 @@ class NeuralNetwork():
                 layer.initialize_parameters(self.input_layer.nodes)
             else:
                 layer.initialize_parameters(self.hidden_layers[i - 1].nodes)
-        self.output_layer.initialize_parameters(self.hidden_layers[-1].nodes)
+        if len(self.hidden_layers) != 0:
+            self.output_layer.initialize_parameters(self.hidden_layers[-1].nodes)
+        else:
+            self.output_layer.initialize_parameters(self.input_layer.nodes)
         self.optimizer.initialize(self.hidden_layers + [self.output_layer])
 
     def train(self, inputs: NDArray, targets: NDArray, epochs: int) -> None:
