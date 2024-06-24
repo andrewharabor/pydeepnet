@@ -37,7 +37,7 @@ class Huber(CostFunc):
 
     def __init__(self, threshold: Float64) -> None:
         if threshold < 0:
-            raise ValueError("Threshold must be non-negative")
+            raise ValueError("Threshold is negative")
         self.threshold = threshold
 
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:

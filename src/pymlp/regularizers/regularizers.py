@@ -17,7 +17,7 @@ class Regularizer(ABC):
 
     def _assert_non_negative(self, penalty: Float64) -> None:
         if penalty < 0:
-            raise ValueError("Penalty must be non-negative")
+            raise ValueError("Penalty is negative")
 
 
 class L1Norm(Regularizer):
