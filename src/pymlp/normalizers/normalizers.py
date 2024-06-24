@@ -19,7 +19,7 @@ class Normalizer(ABC):
 
     def _assert_shape(self, inputs: NDArray) -> None:
         if inputs.shape[0] == 0:
-            raise ValueError("Input array is empty")
+            raise ValueError("Inputs array is empty")
 
     def _assert_adapted(self) -> None:
         if not self._adapted:
