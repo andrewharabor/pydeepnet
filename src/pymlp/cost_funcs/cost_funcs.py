@@ -11,8 +11,7 @@ class CostFunc(ABC):
     def derivative(self, predictions: NDArray, targets: NDArray) -> NDArray:
         pass
 
-    @staticmethod
-    def _assert_shapes(predictions: NDArray, targets: NDArray) -> None:
+    def _assert_shapes(self, predictions: NDArray, targets: NDArray) -> None:
         if predictions.shape[0] == 0:
             raise ValueError("`predictions` array is empty")
         if targets.shape[0] == 0:
@@ -25,11 +24,11 @@ class CrossEntropy(CostFunc):
     offset: Float64 = Float64(1e-9)  # to avoid logarithm of or division by zero
 
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
-        CrossEntropy._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return -np.sum(targets * np.log(predictions + self.offset))
 
     def derivative(self, predictions: NDArray, targets: NDArray) -> NDArray:
-        CrossEntropy._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return -targets / (predictions + self.offset)
 
 
@@ -40,41 +39,41 @@ class Huber(CostFunc):
         self.threshold = threshold
 
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
-        Huber._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         diff: NDArray = np.abs(predictions - targets)
         return np.sum(np.where(diff <= self.threshold, 0.5 * (diff ** 2), self.threshold * (diff - 0.5 * self.threshold))) / predictions.shape[0]
 
     def derivative(self, predictions: NDArray, targets: NDArray) -> NDArray:
-        Huber._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         diff: NDArray = predictions - targets
         return np.where(np.abs(diff) <= self.threshold, diff, self.threshold * np.sign(diff)) / predictions.shape[0]
 
 
 class LogCosh(CostFunc):
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
-        LogCosh._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return np.sum(np.log(np.cosh(predictions - targets))) / predictions.shape[0]
 
     def derivative(self, predictions: NDArray, targets: NDArray) -> NDArray:
-        LogCosh._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return np.tanh(predictions - targets) / predictions.shape[0]
 
 
 class MeanAbsoluteError(CostFunc):
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
-        MeanAbsoluteError._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return np.sum(np.abs(predictions - targets)) / predictions.shape[0]
 
     def derivative(self, predictions: NDArray, targets: NDArray) -> NDArray:
-        MeanAbsoluteError._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return np.sign(predictions - targets) / predictions.shape[0]
 
 
 class MeanSquaredError(CostFunc):
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
-        MeanSquaredError._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return np.sum((predictions - targets) ** 2) / (2 * predictions.shape[0])
 
     def derivative(self, predictions: NDArray, targets: NDArray) -> NDArray:
-        MeanSquaredError._assert_shapes(predictions, targets)
+        self._assert_shapes(predictions, targets)
         return (predictions - targets) / predictions.shape[0]
