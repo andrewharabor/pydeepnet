@@ -15,11 +15,16 @@ class Regularizer(ABC):
         if weights.shape[0] == 0:
             raise ValueError("Weights array is empty")
 
+    def _assert_non_negative(self, penalty: Float64) -> None:
+        if penalty < 0:
+            raise ValueError("Penalty must be non-negative")
+
 
 class L1Norm(Regularizer):
     penalty: Float64
 
     def __init__(self, penalty: Float64) -> None:
+        self._assert_non_negative(penalty)
         self.penalty = penalty
 
     def compute(self, weights: NDArray) -> Float64:
@@ -35,6 +40,7 @@ class L2Norm(Regularizer):
     penalty: Float64
 
     def __init__(self, penalty: Float64) -> None:
+        self._assert_non_negative(penalty)
         self.penalty = penalty
 
     def compute(self, weights: NDArray) -> Float64:
@@ -51,6 +57,8 @@ class ElasticNet(Regularizer):
     l2_regularizer: L2Norm
 
     def __init__(self, l1_penalty: Float64, l2_penalty: Float64) -> None:
+        self._assert_non_negative(l1_penalty)
+        self._assert_non_negative(l2_penalty)
         self.l1_regularizer = L1Norm(l1_penalty)
         self.l2_regularizer = L2Norm(l2_penalty)
 

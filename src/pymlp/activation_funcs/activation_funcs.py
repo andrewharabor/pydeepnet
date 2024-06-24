@@ -40,6 +40,8 @@ class ReLU(ActivationFunc):
     leak: Float64  # for leaky ReLU
 
     def __init__(self, leak: Float64 = Float64(0.0)) -> None:
+        if leak < 0:
+            raise ValueError("Leak must be non-negative")
         self.leak = leak
 
     def compute(self, vector: NDArray) -> NDArray:
