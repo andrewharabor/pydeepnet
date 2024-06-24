@@ -11,18 +11,9 @@ class Regularizer(ABC):
     def derivative(self, weights: NDArray) -> NDArray:
         pass
 
-
-class L2Norm(Regularizer):
-    penalty: Float64
-
-    def __init__(self, penalty: Float64) -> None:
-        self.penalty = penalty
-
-    def compute(self, weights: NDArray) -> Float64:
-        return self.penalty / 2 * np.sum(weights ** 2)
-
-    def derivative(self, weights: NDArray) -> NDArray:
-        return self.penalty * weights
+    def _assert_shape(self, weights: NDArray) -> None:
+        if weights.shape[0] == 0:
+            raise ValueError("Weights array is empty")
 
 
 class L1Norm(Regularizer):
@@ -32,10 +23,27 @@ class L1Norm(Regularizer):
         self.penalty = penalty
 
     def compute(self, weights: NDArray) -> Float64:
+        self._assert_shape(weights)
         return self.penalty * np.sum(np.abs(weights))
 
     def derivative(self, weights: NDArray) -> NDArray:
+        self._assert_shape(weights)
         return self.penalty * np.sign(weights)
+
+
+class L2Norm(Regularizer):
+    penalty: Float64
+
+    def __init__(self, penalty: Float64) -> None:
+        self.penalty = penalty
+
+    def compute(self, weights: NDArray) -> Float64:
+        self._assert_shape(weights)
+        return self.penalty / 2 * np.sum(weights ** 2)
+
+    def derivative(self, weights: NDArray) -> NDArray:
+        self._assert_shape(weights)
+        return self.penalty * weights
 
 
 class ElasticNet(Regularizer):
@@ -47,7 +55,9 @@ class ElasticNet(Regularizer):
         self.l2_regularizer = L2Norm(l2_penalty)
 
     def compute(self, weights: NDArray) -> Float64:
+        self._assert_shape(weights)
         return self.l1_regularizer.compute(weights) + self.l2_regularizer.compute(weights)
 
     def derivative(self, weights: NDArray) -> NDArray:
+        self._assert_shape(weights)
         return self.l1_regularizer.derivative(weights) + self.l2_regularizer.derivative(weights)
