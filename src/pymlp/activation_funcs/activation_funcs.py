@@ -31,8 +31,8 @@ class Softmax(ActivationFunc):
         return exp / np.sum(exp)
 
     def derivative(self, vector: NDArray) -> NDArray:
-        softmax: NDArray = self.compute(vector).reshape(-1, 1)
-        return np.diagflat(softmax) - np.dot(softmax, softmax.T)  # Jacobian matrix
+        softmax: NDArray = self.compute(vector)
+        return np.diag(softmax) - np.outer(softmax, softmax)
 
 
 class Sigmoid(ActivationFunc):
