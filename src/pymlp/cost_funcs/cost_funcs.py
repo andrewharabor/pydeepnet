@@ -12,10 +12,12 @@ class CostFunc(ABC):
         pass
 
     def _assert_shapes(self, predictions: NDArray, targets: NDArray) -> None:
-        if predictions.shape[0] == 0 or targets.shape[0] == 0:
-            raise ValueError("Input arrays are empty")
+        if predictions.shape[0] == 0:
+            raise ValueError("Predictions array is empty")
+        if targets.shape[0] == 0:
+            raise ValueError("Targets array is empty")
         if predictions.shape != targets.shape:
-            raise ValueError("Input arrays have different shapes")
+            raise ValueError("Predictions and targets arrays have different shapes")
 
 
 class CrossEntropy(CostFunc):
