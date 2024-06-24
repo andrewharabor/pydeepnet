@@ -3,6 +3,8 @@ from pymlp.typing import *
 
 
 class Normalizer(ABC):
+    _adapted: bool = False
+
     @abstractmethod
     def adapt(self, inputs: NDArray) -> None:
         pass
@@ -12,23 +14,35 @@ class Normalizer(ABC):
         pass
 
     @abstractmethod
-    def undo(self, norm_inputs: NDArray) -> NDArray:
+    def undo(self, inputs: NDArray) -> NDArray:
         pass
 
+    def _assert_shape(self, inputs: NDArray) -> None:
+        if inputs.shape[0] == 0:
+            raise ValueError("Input array is empty")
 
-class ZScore(Normalizer):
-    mean: NDArray
-    std_dev: NDArray
+    def _assert_adapted(self) -> None:
+        if not self._adapted:
+            raise ValueError("Normalizer has not been adapted to input data")
+
+
+class DecimalScaling(Normalizer):
+    scale: NDArray
 
     def adapt(self, inputs: NDArray) -> None:
-        self.mean = np.mean(inputs, axis=0)
-        self.std_dev = np.std(inputs, axis=0)
+        self._assert_shape(inputs)
+        self._adapted = True
+        self.scale = np.ceil(np.log10(np.max(np.abs(inputs))))
 
     def transform(self, inputs: NDArray) -> NDArray:
-        return (inputs - self.mean) / self.std_dev
+        self._assert_shape(inputs)
+        self._assert_adapted()
+        return inputs / (10 ** self.scale)
 
-    def undo(self, norm_inputs: NDArray) -> NDArray:
-        return norm_inputs * self.std_dev + self.mean
+    def undo(self, inputs: NDArray) -> NDArray:
+        self._assert_shape(inputs)
+        self._assert_adapted()
+        return inputs * (10 ** self.scale)
 
 
 class MinMax(Normalizer):
@@ -36,24 +50,38 @@ class MinMax(Normalizer):
     max: NDArray
 
     def adapt(self, inputs: NDArray) -> None:
+        self._assert_shape(inputs)
+        self._adapted = True
         self.min = np.min(inputs, axis=0)
         self.max = np.max(inputs, axis=0)
 
     def transform(self, inputs: NDArray) -> NDArray:
+        self._assert_shape(inputs)
+        self._assert_adapted()
         return (inputs - self.min) / (self.max - self.min)
 
-    def undo(self, norm_inputs: NDArray) -> NDArray:
-        return norm_inputs * (self.max - self.min) + self.min
+    def undo(self, inputs: NDArray) -> NDArray:
+        self._assert_shape(inputs)
+        self._assert_adapted()
+        return inputs * (self.max - self.min) + self.min
 
 
-class DecimalScaling(Normalizer):
-    scale: NDArray
+class ZScore(Normalizer):
+    mean: NDArray
+    std_dev: NDArray
 
     def adapt(self, inputs: NDArray) -> None:
-        self.scale = np.ceil(np.log10(np.max(np.abs(inputs))))
+        self._assert_shape(inputs)
+        self._adapted = True
+        self.mean = np.mean(inputs, axis=0)
+        self.std_dev = np.std(inputs, axis=0)
 
     def transform(self, inputs: NDArray) -> NDArray:
-        return inputs / (10 ** self.scale)
+        self._assert_shape(inputs)
+        self._assert_adapted()
+        return (inputs - self.mean) / self.std_dev
 
-    def undo(self, norm_inputs: NDArray) -> NDArray:
-        return norm_inputs * (10 ** self.scale)
+    def undo(self, inputs: NDArray) -> NDArray:
+        self._assert_shape(inputs)
+        self._assert_adapted()
+        return inputs * self.std_dev + self.mean
