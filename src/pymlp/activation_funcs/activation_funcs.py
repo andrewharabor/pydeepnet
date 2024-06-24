@@ -13,7 +13,7 @@ class ActivationFunc(ABC):
 
     def _assert_shape(self, vector: NDArray) -> None:
         if vector.shape[0] == 0:
-            raise ValueError("`vector` array is empty")
+            raise ValueError("Input array is empty")
 
 
 class BinaryStep(ActivationFunc):
