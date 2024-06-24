@@ -51,11 +51,3 @@ class ElasticNet(Regularizer):
 
     def derivative(self, weights: NDArray) -> NDArray:
         return self.l1_regularizer.derivative(weights) + self.l2_regularizer.derivative(weights)
-
-
-class NoReg(Regularizer):
-    def compute(self, weights: NDArray) -> Float64:
-        return Float64(0.0)
-
-    def derivative(self, weights: NDArray) -> NDArray:
-        return np.zeros(weights.shape)
