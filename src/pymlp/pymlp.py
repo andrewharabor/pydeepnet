@@ -12,6 +12,8 @@ class NeuralNetwork():
     optimizer: Optimizer
     error_metric: ErrorMetric | None
 
+    _progress_bar_size: Int64 = Int64(25)
+
     def __init__(self, input_layer: InputLayer, hidden_layers: list[DenseLayer], output_layer: DenseOutputLayer, optimizer: Optimizer, error_metric: ErrorMetric | None) -> None:
         self.input_layer = input_layer
         self.hidden_layers = hidden_layers
@@ -78,9 +80,10 @@ class NeuralNetwork():
                 self.output_layer.weights_gradient /= examples
                 self.output_layer.biases_gradient /= examples
                 self.optimizer.update_parameters(self.hidden_layers + [self.output_layer])
-                # Print progress
-                if verbose and (epochs < 100 or iteration % round(epochs / 100) == 0) and batch == 1:
-                    print(f"Iteration {iteration}/{epochs} ({(iteration / epochs * 100):.2f}%): Cost = {cost}")
+                if verbose:
+                    self._print_progress(self._progress_bar_size, Int64(iteration), epochs, Int64(batch), max_batch, cost)
+            if verbose:
+                print()
 
     def predict(self, inputs: NDArray) -> NDArray:
         if inputs.shape[0] == 0:
@@ -103,3 +106,7 @@ class NeuralNetwork():
         if self.error_metric is None:
             raise AttributeError("No error metric provided")
         return self.error_metric.compute(predictions, targets)
+
+    def _print_progress(self, size: Int64, iteration: Int64, epochs: Int64, batch: Int64, max_batch: Int64, cost: Float64) -> None:
+        progress_bar: str = "[" + ("#" * round(batch / max_batch * size)) + ("=" * round((max_batch - batch) / max_batch * size)) + "]"
+        print(f"Epoch {iteration}/{epochs} ({(iteration / epochs * 100):.2f}%)     {progress_bar} Batch {batch}/{max_batch} ({(batch / max_batch * 100):.2f}%)     Cost = {cost}", end="\r")
