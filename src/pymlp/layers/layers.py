@@ -19,16 +19,16 @@ class Layer(ABC):
         if inputs.shape[0] == 0:
             raise ValueError("Inputs array is empty")
 
-    def _assert_positive(self, nodes: int) -> None:
+    def _assert_positive(self, nodes: Int64) -> None:
         if nodes <= 0:
             raise ValueError("Number of nodes is non-positive")
 
 
 class InputLayer(Layer):
-    nodes: int
+    nodes: Int64
     normalizer: Normalizer | None
 
-    def __init__(self, nodes: int, normalizer: Normalizer | None) -> None:
+    def __init__(self, nodes: Int64, normalizer: Normalizer | None) -> None:
         self._assert_positive(nodes)
         self.nodes = nodes
         self.normalizer = normalizer
@@ -44,7 +44,7 @@ class InputLayer(Layer):
 
 
 class DenseLayer(Layer):
-    nodes: int
+    nodes: Int64
     activation_func: ActivationFunc
     regularizer: Regularizer | None
 
@@ -59,13 +59,13 @@ class DenseLayer(Layer):
     _gradients_initialized: bool = False
     _inputs_stored: bool = False
 
-    def __init__(self, nodes: int, activation_func: ActivationFunc, regularizer: Regularizer | None) -> None:
+    def __init__(self, nodes: Int64, activation_func: ActivationFunc, regularizer: Regularizer | None) -> None:
         self._assert_positive(nodes)
         self.nodes = nodes
         self.activation_func = activation_func
         self.regularizer = regularizer
 
-    def initialize_parameters(self, prev_nodes: int) -> None:
+    def initialize_parameters(self, prev_nodes: Int64) -> None:
         self._assert_positive(prev_nodes)
         self._parameters_initialized = True
         self.weights = np.random.normal(size=(self.nodes, prev_nodes))
@@ -113,7 +113,7 @@ class DenseLayer(Layer):
 class DenseOutputLayer(DenseLayer):
     cost_func: CostFunc
 
-    def __init__(self, nodes: int, activation_func: ActivationFunc, regularizer: Regularizer | None, cost_func: CostFunc) -> None:
+    def __init__(self, nodes: Int64, activation_func: ActivationFunc, regularizer: Regularizer | None, cost_func: CostFunc) -> None:
         self._assert_positive(nodes)
         super().__init__(nodes, activation_func, regularizer)
         self.cost_func = cost_func
