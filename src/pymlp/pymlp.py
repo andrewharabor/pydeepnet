@@ -29,7 +29,7 @@ class NeuralNetwork():
             self.output_layer.initialize_parameters(self.input_layer.nodes)
         self.optimizer.initialize(self.hidden_layers + [self.output_layer])
 
-    def train(self, inputs: NDArray, targets: NDArray, epochs: Int64, mini_batch_size: Int64 = Int64(50), verbose: bool = True) -> None:
+    def train(self, inputs: NDArray, targets: NDArray, epochs: Int64, mini_batch_size: Int64 = Int64(32), verbose: bool = True) -> None:
         if inputs.shape[0] == 0 or targets.shape[0] == 0:
             raise ValueError("Inputs or targets arrays are empty")
         if inputs.shape[0] != targets.shape[0]:
@@ -40,39 +40,47 @@ class NeuralNetwork():
             raise ValueError("Number of epochs is non-positive")
         if mini_batch_size <= 0:
             raise ValueError("Mini batch size is non-positive")
-        examples: Int64 = Int64(inputs.shape[0])
         if self.input_layer.normalizer is not None:
             self.input_layer.normalizer.adapt(inputs)
         for iteration in range(1, epochs + 1):
-            for layer in self.hidden_layers:
-                layer.initialize_gradients()
-            self.output_layer.initialize_gradients()
-            cost: Float64 = Float64(0.0)
-            for i in range(examples):
-                # Forward propagation and compute cost
-                outputs: NDArray = self.input_layer.forward_propagation(inputs[i])
+            rand_indices: NDArray = np.random.permutation(inputs.shape[0])
+            max_batch: Int64 = inputs.shape[0] // mini_batch_size + (1 if inputs.shape[0] % mini_batch_size != 0 else 0)
+            for batch in range(1, max_batch + 1):
+                # Prepare mini batch
+                batch_indices: NDArray = rand_indices[(batch - 1) * mini_batch_size:min(batch * mini_batch_size, inputs.shape[0])]
+                batch_inputs: NDArray = inputs[batch_indices]
+                batch_targets: NDArray = targets[batch_indices]
+                examples: Int64 = Int64(batch_inputs.shape[0])
+                # Initialization
                 for layer in self.hidden_layers:
-                    outputs = layer.forward_propagation(outputs)
-                    if layer.regularizer is not None:
-                        cost += layer.regularizer.compute(layer.weights)
-                outputs = self.output_layer.forward_propagation(outputs)
-                cost += self.output_layer.cost_func.compute(outputs, targets[i])
-                if self.output_layer.regularizer is not None:
-                    cost += self.output_layer.regularizer.compute(self.output_layer.weights)
-                # Back propagation
-                derivative: NDArray = self.output_layer.start_back_propagation(targets[i])
-                for layer in reversed(self.hidden_layers):
-                    derivative = layer.back_propagation(derivative)
-            # Update parameters
-            for layer in self.hidden_layers:
-                layer.weights_gradient /= examples
-                layer.biases_gradient /= examples
-            self.output_layer.weights_gradient /= examples
-            self.output_layer.biases_gradient /= examples
-            self.optimizer.update_parameters(self.hidden_layers + [self.output_layer])
-            # Print progress
-            if verbose and (epochs < 100 or iteration % round(epochs / 100) == 0):
-                print(f"Iteration {iteration}/{epochs} ({(iteration / epochs * 100):.2f}%): Cost = {cost}")
+                    layer.initialize_gradients()
+                self.output_layer.initialize_gradients()
+                cost: Float64 = Float64(0.0)
+                for i in range(examples):
+                    # Forward propagation and compute cost
+                    outputs: NDArray = self.input_layer.forward_propagation(batch_inputs[i])
+                    for layer in self.hidden_layers:
+                        outputs = layer.forward_propagation(outputs)
+                        if layer.regularizer is not None:
+                            cost += layer.regularizer.compute(layer.weights)
+                    outputs = self.output_layer.forward_propagation(outputs)
+                    cost += self.output_layer.cost_func.compute(outputs, batch_targets[i])
+                    if self.output_layer.regularizer is not None:
+                        cost += self.output_layer.regularizer.compute(self.output_layer.weights)
+                    # Back propagation
+                    derivative: NDArray = self.output_layer.start_back_propagation(batch_targets[i])
+                    for layer in reversed(self.hidden_layers):
+                        derivative = layer.back_propagation(derivative)
+                # Update parameters
+                for layer in self.hidden_layers:
+                    layer.weights_gradient /= examples
+                    layer.biases_gradient /= examples
+                self.output_layer.weights_gradient /= examples
+                self.output_layer.biases_gradient /= examples
+                self.optimizer.update_parameters(self.hidden_layers + [self.output_layer])
+                # Print progress
+                if verbose and (epochs < 100 or iteration % round(epochs / 100) == 0) and batch == 1:
+                    print(f"Iteration {iteration}/{epochs} ({(iteration / epochs * 100):.2f}%): Cost = {cost}")
 
     def predict(self, inputs: NDArray) -> NDArray:
         if inputs.shape[0] == 0:
