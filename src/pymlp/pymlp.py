@@ -29,11 +29,21 @@ class NeuralNetwork():
             self.output_layer.initialize_parameters(self.input_layer.nodes)
         self.optimizer.initialize(self.hidden_layers + [self.output_layer])
 
-    def train(self, inputs: NDArray, targets: NDArray, epochs: int) -> None:
-        examples: int = inputs.shape[0]
+    def train(self, inputs: NDArray, targets: NDArray, epochs: Int64, mini_batch_size: Int64 = Int64(50), verbose: bool = True) -> None:
+        if inputs.shape[0] == 0 or targets.shape[0] == 0:
+            raise ValueError("Inputs or targets arrays are empty")
+        if inputs.shape[0] != targets.shape[0]:
+            raise ValueError("Inputs and targets arrays have different number of examples")
+        if inputs.shape[1] != self.input_layer.nodes or targets.shape[1] != self.output_layer.nodes:
+            raise ValueError("Inputs or targets arrays have incorrect number of features")
+        if epochs <= 0:
+            raise ValueError("Number of epochs is non-positive")
+        if mini_batch_size <= 0:
+            raise ValueError("Mini batch size is non-positive")
+        examples: Int64 = Int64(inputs.shape[0])
         if self.input_layer.normalizer is not None:
             self.input_layer.normalizer.adapt(inputs)
-        for _ in range(1, epochs + 1):
+        for iteration in range(1, epochs + 1):
             for layer in self.hidden_layers:
                 layer.initialize_gradients()
             self.output_layer.initialize_gradients()
@@ -48,7 +58,7 @@ class NeuralNetwork():
                 outputs = self.output_layer.forward_propagation(outputs)
                 cost += self.output_layer.cost_func.compute(outputs, targets[i])
                 if self.output_layer.regularizer is not None:
-                    self.output_layer.regularizer.compute(self.output_layer.weights)
+                    cost += self.output_layer.regularizer.compute(self.output_layer.weights)
                 # Back propagation
                 derivative: NDArray = self.output_layer.start_back_propagation(targets[i])
                 for layer in reversed(self.hidden_layers):
@@ -60,18 +70,28 @@ class NeuralNetwork():
             self.output_layer.weights_gradient /= examples
             self.output_layer.biases_gradient /= examples
             self.optimizer.update_parameters(self.hidden_layers + [self.output_layer])
+            # Print progress
+            if verbose and (epochs < 100 or iteration % round(epochs / 100) == 0):
+                print(f"Iteration {iteration}/{epochs} ({(iteration / epochs * 100):.2f}%): Cost = {cost}")
 
     def predict(self, inputs: NDArray) -> NDArray:
+        if inputs.shape[0] == 0:
+            raise ValueError("Inputs array is empty")
+        if inputs.shape[1] != self.input_layer.nodes:
+            raise ValueError("Inputs array has incorrect number of features")
         predictions: NDArray = np.zeros((inputs.shape[0], self.output_layer.nodes))
         for i in range(inputs.shape[0]):
             outputs: NDArray = self.input_layer.forward_propagation(inputs[i])
             for layer in self.hidden_layers:
                 outputs = layer.forward_propagation(outputs)
-            outputs = self.output_layer.forward_propagation(outputs)
-            predictions[i] = outputs
+            predictions[i] = self.output_layer.forward_propagation(outputs)
         return predictions
 
     def evaluate(self, predictions: NDArray, targets: NDArray) -> Float64:
+        if predictions.shape[0] == 0 or targets.shape[0] == 0:
+            raise ValueError("Predictions or targets arrays are empty")
+        if predictions.shape[0] != targets.shape[0]:
+            raise ValueError("Predictions and targets arrays have different number of examples")
         if self.error_metric is None:
             raise AttributeError("No error metric provided")
         return self.error_metric.compute(predictions, targets)
