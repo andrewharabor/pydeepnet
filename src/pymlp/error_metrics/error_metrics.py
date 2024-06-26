@@ -25,4 +25,4 @@ class MeanAbsolutePercentageError(ErrorMetric):
 class PercentCorrect(ErrorMetric):
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
         self._assert_shapes(predictions, targets)
-        return np.sum(np.round(predictions) == targets) / predictions.shape[0]
+        return np.sum(np.argmax(predictions, axis=1) == np.argmax(targets, axis=1)) / predictions.shape[0]
