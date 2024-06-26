@@ -1,6 +1,7 @@
 autopep8
 ipython
 isort
+matplotlib
 numpy
 scipy
 tensorflow
