@@ -4,6 +4,13 @@ from .layers import DenseLayer, DenseOutputLayer, InputLayer
 from .optimizers import Optimizer
 from .typing import *
 
+BOLD_COLOR: str = "\033[1m"
+BLUE_COLOR: str = "\033[94m"
+CYAN_COLOR: str = "\033[96m"
+GREEN_COLOR: str = "\033[92m"
+PINK_COLOR: str = "\033[95m"
+END_COLOR: str = "\033[0m"
+
 
 class NeuralNetwork():
     input_layer: InputLayer
@@ -108,5 +115,5 @@ class NeuralNetwork():
         return self.error_metric.compute(predictions, targets)
 
     def _print_progress(self, size: Int64, iteration: Int64, epochs: Int64, batch: Int64, max_batch: Int64, cost: Float64) -> None:
-        progress_bar: str = "[" + ("#" * round(batch / max_batch * size)) + ("=" * round((max_batch - batch) / max_batch * size)) + "]"
-        print(f"Epoch {iteration}/{epochs} ({(iteration / epochs * 100):.2f}%)     {progress_bar} Batch {batch}/{max_batch} ({(batch / max_batch * 100):.2f}%)     Cost = {cost}", end="\r")
+        progress_bar: str = BOLD_COLOR + "[" + GREEN_COLOR + ("#" * round(batch / max_batch * size)) + END_COLOR + BOLD_COLOR + ("=" * round((max_batch - batch) / max_batch * size)) + "]" + END_COLOR
+        print(f"Epoch {BLUE_COLOR}{iteration}{END_COLOR}/{epochs} ({(iteration / epochs * 100):.2f}%)     {progress_bar} Batch {CYAN_COLOR}{batch}{END_COLOR}/{max_batch} ({(batch / max_batch * 100):.2f}%)     Cost = {PINK_COLOR}{cost}{END_COLOR}", end="\r")
