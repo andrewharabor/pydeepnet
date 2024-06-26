@@ -31,7 +31,7 @@ class NeuralNetwork():
             self.output_layer.initialize_parameters(self.input_layer.nodes)
         self.optimizer.initialize(self.hidden_layers + [self.output_layer])
 
-    def train(self, inputs: NDArray, targets: NDArray, epochs: Int64, mini_batch_size: Int64 = Int64(32), verbose: bool = True) -> None:
+    def train(self, inputs: NDArray, targets: NDArray, epochs: Int64, mini_batch_size: Int64, verbose: bool = True) -> None:
         if inputs.shape[0] == 0 or targets.shape[0] == 0:
             raise ValueError("Inputs or targets arrays are empty")
         if inputs.shape[0] != targets.shape[0]:
