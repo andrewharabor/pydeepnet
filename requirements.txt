@@ -1,7 +1,14 @@
 autopep8
+ipympl
 ipython
+ipywidgets
 isort
+jupyterlab
 matplotlib
+notebook
 numpy
+pandas
 scipy
+scikit-learn
+sympy
 tensorflow
