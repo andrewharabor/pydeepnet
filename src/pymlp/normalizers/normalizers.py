@@ -58,7 +58,8 @@ class MinMax(Normalizer):
     def transform(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
         self._assert_adapted()
-        return (inputs - self.min) / (self.max - self.min)
+        diff: NDArray = self.max - self.min
+        return (inputs - self.min) / np.where(diff == 0, 1, diff)  # Prevent division by zero
 
     def undo(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
@@ -75,6 +76,7 @@ class ZScore(Normalizer):
         self._adapted = True
         self.mean = np.mean(inputs, axis=0)
         self.std_dev = np.std(inputs, axis=0)
+        self.std_dev = np.where(self.std_dev == 0, 1, self.std_dev)  # Prevent division by zero
 
     def transform(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
