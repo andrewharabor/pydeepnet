@@ -9,6 +9,7 @@ BLUE_COLOR: str = "\033[94m"
 CYAN_COLOR: str = "\033[96m"
 GREEN_COLOR: str = "\033[92m"
 PINK_COLOR: str = "\033[95m"
+RED_COLOR: str = "\033[91m"
 END_COLOR: str = "\033[0m"
 
 
@@ -49,6 +50,7 @@ class NeuralNetwork():
             raise ValueError("Number of epochs is non-positive")
         if mini_batch_size <= 0:
             raise ValueError("Mini batch size is non-positive")
+        start_time: Float64 = Float64(time())
         if self.input_layer.normalizer is not None:
             self.input_layer.normalizer.adapt(inputs)
         for iteration in range(1, epochs + 1):
@@ -91,6 +93,13 @@ class NeuralNetwork():
                     self._print_progress(self._progress_bar_size, Int64(iteration), epochs, Int64(batch), max_batch, cost)
             if verbose:
                 print()
+        if verbose:
+            diff_secs: Float64 = Float64(time() - start_time)
+            diff_mins: Int64 = Int64(diff_secs // 60)
+            diff_hours: Int64 = diff_mins // 60
+            diff_secs -= diff_mins * 60
+            diff_mins %= 60
+            print(f"Training completed in {BOLD_COLOR}{RED_COLOR}{diff_hours:.0f}h {diff_mins:.0f}m {diff_secs:.4f}s{END_COLOR}")
 
     def predict(self, inputs: NDArray) -> NDArray:
         if inputs.shape[0] == 0:

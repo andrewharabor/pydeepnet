@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from time import time
 from typing import Any, TypeAlias
 
 import numpy as np
