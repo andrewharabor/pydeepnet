@@ -123,6 +123,25 @@ class NeuralNetwork():
             raise AttributeError("No error metric provided")
         return self.error_metric.compute(predictions, targets)
 
+    def save_parameters(self) -> tuple[list[tuple[NDArray, NDArray]], tuple[NDArray, NDArray]]:
+        hidden_layers_params: list[tuple[NDArray, NDArray]] = []
+        for layer in self.hidden_layers:
+            hidden_layers_params.append((layer.weights, layer.biases))
+        return hidden_layers_params, (self.output_layer.weights, self.output_layer.biases)
+
+    def load_parameters(self, hidden_layers_params: list[tuple[NDArray, NDArray]], output_layer_params: tuple[NDArray, NDArray]) -> None:
+        if len(hidden_layers_params) != len(self.hidden_layers):
+            raise ValueError("Number of hidden layers parameters is incorrect")
+        for i, (weights, biases) in enumerate(hidden_layers_params):
+            if weights.shape != self.hidden_layers[i].weights.shape or biases.shape != self.hidden_layers[i].biases.shape:
+                raise ValueError("Shape of hidden layer parameters is incorrect")
+            self.hidden_layers[i].weights = weights
+            self.hidden_layers[i].biases = biases
+        if output_layer_params[0].shape != self.output_layer.weights.shape or output_layer_params[1].shape != self.output_layer.biases.shape:
+            raise ValueError("Shape of output layer parameters is incorrect")
+        self.output_layer.weights = output_layer_params[0]
+        self.output_layer.biases = output_layer_params[1]
+
     def _print_progress(self, size: Int64, iteration: Int64, epochs: Int64, batch: Int64, max_batch: Int64, cost: Float64) -> None:
         progress_bar: str = BOLD_COLOR + "[" + GREEN_COLOR + ("#" * round(batch / max_batch * size)) + END_COLOR + BOLD_COLOR + ("=" * round((max_batch - batch) / max_batch * size)) + "]" + END_COLOR
         print(f"Epoch {BLUE_COLOR}{iteration}{END_COLOR}/{epochs} ({(iteration / epochs * 100):.2f}%)     {progress_bar} Batch {CYAN_COLOR}{batch}{END_COLOR}/{max_batch} ({(batch / max_batch * 100):.2f}%)     Cost = {PINK_COLOR}{cost}{END_COLOR}", end="\r")
