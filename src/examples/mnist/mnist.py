@@ -4,15 +4,15 @@ from tarfile import TarFile, open
 
 import numpy as np
 
-from pymlp import NeuralNetwork
-from pymlp.activation_funcs import ReLU, Softmax
-from pymlp.cost_funcs import CrossEntropy
-from pymlp.error_metrics import PercentCorrect
-from pymlp.layers import DenseLayer, DenseOutputLayer, InputLayer
-from pymlp.normalizers import ZScore
-from pymlp.optimizers import Adam
-from pymlp.regularizers import ElasticNet
-from pymlp.typing import Float64, Int64, NDArray
+from pynet import NeuralNetwork
+from pynet.activation_funcs import ReLU, Softmax
+from pynet.cost_funcs import CrossEntropy
+from pynet.error_metrics import PercentCorrect
+from pynet.layers import DenseLayer, DenseOutputLayer, InputLayer
+from pynet.normalizers import ZScore
+from pynet.optimizers import Adam
+from pynet.regularizers import ElasticNet
+from pynet.typing import Float64, Int64, NDArray
 
 # Paths
 BASE_PATH: str = "src/examples/mnist"

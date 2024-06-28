@@ -1,11 +1,11 @@
 
 from abc import ABC, abstractmethod
 
-from pymlp.activation_funcs import *
-from pymlp.cost_funcs import *
-from pymlp.normalizers import *
-from pymlp.regularizers import *
-from pymlp.typing import *
+from pynet.activation_funcs import *
+from pynet.cost_funcs import *
+from pynet.normalizers import *
+from pynet.regularizers import *
+from pynet.typing import *
 
 
 class Layer(ABC):

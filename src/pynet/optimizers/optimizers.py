@@ -1,8 +1,8 @@
 
 from abc import ABC, abstractmethod
 
-from pymlp.layers import *
-from pymlp.typing import *
+from pynet.layers import *
+from pynet.typing import *
 
 
 class Optimizer(ABC):

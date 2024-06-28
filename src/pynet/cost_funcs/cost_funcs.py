@@ -1,7 +1,7 @@
 
 from abc import ABC, abstractmethod
 
-from pymlp.typing import *
+from pynet.typing import *
 
 
 class CostFunc(ABC):

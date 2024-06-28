@@ -1,3 +1,3 @@
-# PyMLP - Python Multilayer Perceptron
+# PyNet - Python Neural Network
 
-A Python "module" for neural networks built from scratch
+A Python "package" for neural networks built from scratch.
