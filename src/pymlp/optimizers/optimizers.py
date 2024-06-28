@@ -1,4 +1,6 @@
 
+from abc import ABC, abstractmethod
+
 from pymlp.layers import *
 from pymlp.typing import *
 

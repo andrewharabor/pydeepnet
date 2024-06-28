@@ -1,4 +1,6 @@
 
+from abc import ABC, abstractmethod
+
 from pymlp.activation_funcs import *
 from pymlp.cost_funcs import *
 from pymlp.normalizers import *

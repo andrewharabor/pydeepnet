@@ -1,4 +1,6 @@
 
+from time import time
+
 from .error_metrics import ErrorMetric
 from .layers import DenseLayer, DenseOutputLayer, InputLayer
 from .optimizers import Optimizer
