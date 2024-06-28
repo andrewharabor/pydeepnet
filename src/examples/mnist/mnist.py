@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import tarfile
+from tarfile import TarFile, open
 
 import numpy as np
 
@@ -30,9 +30,9 @@ EPOCHS: Int64 = Int64(15)
 BATCH_SIZE: Int64 = Int64(32)
 
 # Load MNIST data
-data_file: tarfile.TarFile = tarfile.open(f"{BASE_PATH}/data.tar.gz", "r:gz")
-data_file.extractall(BASE_PATH)
-data_file.close()
+data_file: TarFile
+with open(f"{BASE_PATH}/data.tar.gz", "r:gz") as data_file:
+    data_file.extractall(BASE_PATH)
 train_inputs: NDArray = np.load(f"{DATA_PATH}/train_inputs.npy")
 train_targets: NDArray = np.load(f"{DATA_PATH}/train_targets.npy")
 test_inputs: NDArray = np.load(f"{DATA_PATH}/test_inputs.npy")
@@ -49,15 +49,15 @@ network: NeuralNetwork = NeuralNetwork(
     PercentCorrect()
 )
 
-# network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
+network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 
-hidden_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_weights.npy")
-hidden_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_biases.npy")
-output_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_weights.npy")
-output_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_biases.npy")
-network.load_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
-if network.input_layer.normalizer is not None:
-    network.input_layer.normalizer.adapt(train_inputs)  # normalizer is only adapted in the `NeuralNetwork.train()` method
+# hidden_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_weights.npy")
+# hidden_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_biases.npy")
+# output_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_weights.npy")
+# output_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_biases.npy")
+# network.load_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
+# if network.input_layer.normalizer is not None:
+#     network.input_layer.normalizer.adapt(train_inputs)  # normalizer is only adapted in the `NeuralNetwork.train()` method
 
 train_predictions: NDArray = network.predict(train_inputs)
 test_predictions: NDArray = network.predict(test_inputs)
