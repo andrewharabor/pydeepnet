@@ -27,12 +27,27 @@ class CrossEntropy(CostFunc):
 
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
         self._assert_shapes(predictions, targets)
+        self._assert_probabilities(predictions)
+        self._assert_one_hot(targets)
         return -np.sum(targets * np.log(predictions + self.offset))
 
     def derivative(self, predictions: NDArray, targets: NDArray) -> NDArray:
         self._assert_shapes(predictions, targets)
+        self._assert_probabilities(predictions)
+        self._assert_one_hot(targets)
         return -targets / (predictions + self.offset)
 
+    def _assert_probabilities(self, predictions: NDArray) -> None:
+        if np.any(predictions < 0) or np.any(predictions > 1):
+            raise ValueError("Predictions are not valid probabilities")
+        if not np.isclose(np.sum(predictions), 1):
+            raise ValueError("Predictions do not make up a valid probability distribution")
+
+    def _assert_one_hot(self, targets: NDArray) -> None:
+        if not np.all(np.isin(targets, [0, 1])):
+            raise ValueError("Targets are not one-hot encoded")
+        if np.sum(targets) != 1:
+            raise ValueError("Targets do not make up a valid one-hot encoding")
 
 class Huber(CostFunc):
     threshold: Float64  # threshold for quadratic and linear parts
