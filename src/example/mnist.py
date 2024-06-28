@@ -15,7 +15,7 @@ from pynet.regularizers import ElasticNet
 from pynet.typing import Float64, Int64, NDArray
 
 # Paths
-BASE_PATH: str = "src/examples/mnist"
+BASE_PATH: str = "src/example"
 DATA_PATH: str = f"{BASE_PATH}/data"
 PARAMETERS_PATH: str = f"{BASE_PATH}/parameters"
 
