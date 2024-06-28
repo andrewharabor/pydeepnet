@@ -56,11 +56,11 @@ class NeuralNetwork():
         if self.input_layer.normalizer is not None:
             self.input_layer.normalizer.fit(inputs)
         for iteration in range(1, epochs + 1):
-            rand_indices: NDArray = np.random.permutation(inputs.shape[0])
-            max_batch: Int64 = inputs.shape[0] // mini_batch_size + (1 if inputs.shape[0] % mini_batch_size != 0 else 0)
-            for batch in range(1, max_batch + 1):
+            random_indices: NDArray = np.random.permutation(inputs.shape[0])
+            num_batches: Int64 = inputs.shape[0] // mini_batch_size + (1 if inputs.shape[0] % mini_batch_size != 0 else 0)
+            for batch in range(1, num_batches + 1):
                 # Prepare mini batch
-                batch_indices: NDArray = rand_indices[(batch - 1) * mini_batch_size:min(batch * mini_batch_size, inputs.shape[0])]
+                batch_indices: NDArray = random_indices[(batch - 1) * mini_batch_size:min(batch * mini_batch_size, inputs.shape[0])]
                 batch_inputs: NDArray = inputs[batch_indices]
                 batch_targets: NDArray = targets[batch_indices]
                 examples: Int64 = Int64(batch_inputs.shape[0])
@@ -92,7 +92,7 @@ class NeuralNetwork():
                 self.output_layer.biases_gradient /= examples
                 self.optimizer.update_parameters(self.hidden_layers + [self.output_layer])
                 if verbose:
-                    self._print_progress(self._progress_bar_size, Int64(iteration), epochs, Int64(batch), max_batch, cost)
+                    self._print_progress(self._progress_bar_size, Int64(iteration), epochs, Int64(batch), num_batches, cost)
             if verbose:
                 print()
         if verbose:
