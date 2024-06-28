@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import tarfile
+
 import numpy as np
 
 from pymlp import NeuralNetwork
@@ -12,6 +14,11 @@ from pymlp.optimizers import Adam
 from pymlp.regularizers import ElasticNet
 from pymlp.typing import Float64, Int64, NDArray
 
+# Paths
+BASE_PATH: str = "src/examples/mnist"
+DATA_PATH: str = f"{BASE_PATH}/data"
+PARAMETERS_PATH: str = f"{BASE_PATH}/parameters"
+
 # Hyperparameters
 HIDDEN_LAYER_SIZE: Int64 = Int64(200)
 RELU_LEAK: Float64 = Float64(0.01)
@@ -23,10 +30,13 @@ EPOCHS: Int64 = Int64(15)
 BATCH_SIZE: Int64 = Int64(32)
 
 # Load MNIST data
-train_inputs: NDArray = np.load("src/examples/mnist/data/train_inputs.npy")
-train_targets: NDArray = np.load("src/examples/mnist/data/train_targets.npy")
-test_inputs: NDArray = np.load("src/examples/mnist/data/test_inputs.npy")
-test_targets: NDArray = np.load("src/examples/mnist/data/test_targets.npy")
+data_file: tarfile.TarFile = tarfile.open(f"{BASE_PATH}/data.tar.gz", "r:gz")
+data_file.extractall(BASE_PATH)
+data_file.close()
+train_inputs: NDArray = np.load(f"{DATA_PATH}/train_inputs.npy")
+train_targets: NDArray = np.load(f"{DATA_PATH}/train_targets.npy")
+test_inputs: NDArray = np.load(f"{DATA_PATH}/test_inputs.npy")
+test_targets: NDArray = np.load(f"{DATA_PATH}/test_targets.npy")
 
 # Create, train, and evaluate neural network
 network: NeuralNetwork = NeuralNetwork(
@@ -39,15 +49,15 @@ network: NeuralNetwork = NeuralNetwork(
     PercentCorrect()
 )
 
-network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
+# network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 
-# hidden_layer_weights: NDArray = np.load("src/examples/mnist/parameters/hidden_layer_weights.npy")
-# hidden_layer_biases: NDArray = np.load("src/examples/mnist/parameters/hidden_layer_biases.npy")
-# output_layer_weights: NDArray = np.load("src/examples/mnist/parameters/output_layer_weights.npy")
-# output_layer_biases: NDArray = np.load("src/examples/mnist/parameters/output_layer_biases.npy")
-# network.load_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
-# if network.input_layer.normalizer is not None:
-#     network.input_layer.normalizer.adapt(train_inputs)  # normalizer is only adapted to input data in `train()` method
+hidden_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_weights.npy")
+hidden_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_biases.npy")
+output_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_weights.npy")
+output_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_biases.npy")
+network.load_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
+if network.input_layer.normalizer is not None:
+    network.input_layer.normalizer.adapt(train_inputs)  # normalizer is only adapted in the `NeuralNetwork.train()` method
 
 train_predictions: NDArray = network.predict(train_inputs)
 test_predictions: NDArray = network.predict(test_inputs)
