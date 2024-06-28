@@ -1,10 +1,10 @@
+/src/examples/mnist/data/
+
 .direnv/
 .ipynb_checkpoints/
 .pytest_cache/
 __pycache__/
 .venv/
-/src/examples/mnist/data/
-
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
