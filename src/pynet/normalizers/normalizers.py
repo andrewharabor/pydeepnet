@@ -8,7 +8,7 @@ class Normalizer(ABC):
     _adapted: bool = False
 
     @abstractmethod
-    def adapt(self, inputs: NDArray) -> None:
+    def fit(self, inputs: NDArray) -> None:
         pass
 
     @abstractmethod
@@ -31,7 +31,7 @@ class Normalizer(ABC):
 class DecimalScaling(Normalizer):
     scale: NDArray
 
-    def adapt(self, inputs: NDArray) -> None:
+    def fit(self, inputs: NDArray) -> None:
         self._assert_shape(inputs)
         self._adapted = True
         self.scale = np.ceil(np.log10(np.max(np.abs(inputs))))
@@ -51,7 +51,7 @@ class MinMax(Normalizer):
     min: NDArray
     max: NDArray
 
-    def adapt(self, inputs: NDArray) -> None:
+    def fit(self, inputs: NDArray) -> None:
         self._assert_shape(inputs)
         self._adapted = True
         self.min = np.min(inputs, axis=0)
@@ -73,7 +73,7 @@ class ZScore(Normalizer):
     mean: NDArray
     std_dev: NDArray
 
-    def adapt(self, inputs: NDArray) -> None:
+    def fit(self, inputs: NDArray) -> None:
         self._assert_shape(inputs)
         self._adapted = True
         self.mean = np.mean(inputs, axis=0)

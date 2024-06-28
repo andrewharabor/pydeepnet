@@ -56,7 +56,8 @@ network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 # output_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_weights.npy")
 # output_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_biases.npy")
 # network.load_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
-# network.input_layer.normalizer.adapt(train_inputs)  # normalizer is only adapted in the `NeuralNetwork.train()` method
+# if network.input_layer.normalizer is not None:
+#     network.input_layer.normalizer.fit(train_inputs)  # normalizer is only fit to inputs in the `NeuralNetwork.train()` method
 
 train_predictions: NDArray = network.predict(train_inputs)
 test_predictions: NDArray = network.predict(test_inputs)

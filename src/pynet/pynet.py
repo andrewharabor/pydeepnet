@@ -54,7 +54,7 @@ class NeuralNetwork():
             raise ValueError("Mini batch size is non-positive")
         start_time: Float64 = Float64(time())
         if self.input_layer.normalizer is not None:
-            self.input_layer.normalizer.adapt(inputs)
+            self.input_layer.normalizer.fit(inputs)
         for iteration in range(1, epochs + 1):
             rand_indices: NDArray = np.random.permutation(inputs.shape[0])
             max_batch: Int64 = inputs.shape[0] // mini_batch_size + (1 if inputs.shape[0] % mini_batch_size != 0 else 0)
