@@ -12,10 +12,8 @@ from pynet.optimizers import Adam
 from pynet.regularizers import ElasticNet
 from pynet.typing import Float64, Int64, NDArray
 
-# Paths
+# Path to this file's directory
 BASE_PATH: str = "src/example"
-DATA_PATH: str = f"{BASE_PATH}/data"
-PARAMETERS_PATH: str = f"{BASE_PATH}/parameters"
 
 # Hyperparameters
 HIDDEN_LAYER_SIZE: Int64 = Int64(200)
@@ -47,10 +45,12 @@ network: NeuralNetwork = NeuralNetwork(
 
 network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 
-# hidden_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_weights.npy")
-# hidden_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/hidden_layer_biases.npy")
-# output_layer_weights: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_weights.npy")
-# output_layer_biases: NDArray = np.load(f"{PARAMETERS_PATH}/output_layer_biases.npy")
+# Load previously trained parameters instead of training
+# with np.load(f"{BASE_PATH}/parameters.npz") as parameters:
+#     hidden_layer_weights: NDArray = parameters["hidden_layer_weights"]
+#     hidden_layer_biases: NDArray = parameters["hidden_layer_biases"]
+#     output_layer_weights: NDArray = parameters["output_layer_weights"]
+#     output_layer_biases: NDArray = parameters["output_layer_biases"]
 # network.load_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
 # if network.input_layer.normalizer is not None:
 #     network.input_layer.normalizer.fit(train_inputs)  # normalizer is only fit to inputs in the `NeuralNetwork.train()` method
