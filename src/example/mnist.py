@@ -29,10 +29,10 @@ BATCH_SIZE: Int64 = Int64(32)
 
 # Load MNIST data
 with np.load(f"{BASE_PATH}/data.npz") as data:
-    train_inputs = data["train_inputs"]
-    train_targets = data["train_targets"]
-    test_inputs = data["test_inputs"]
-    test_targets = data["test_targets"]
+    train_inputs: NDArray = data["train_inputs"]
+    train_targets: NDArray = data["train_targets"]
+    test_inputs: NDArray = data["test_inputs"]
+    test_targets: NDArray = data["test_targets"]
 
 # Create, train, and evaluate neural network
 network: NeuralNetwork = NeuralNetwork(
