@@ -122,3 +122,5 @@ As stated multiple times already, PyNet is not intended to be used as a library,
 [Coursera Machine Learning Specialization](https://www.coursera.org/specializations/machine-learning-introduction) - I learned a lot about neural networks by taking this course and this project helped strengthen my understanding of deep learning.
 
 [Neural-Network-Experiments](https://github.com/SebLague/Neural-Network-Experiments) - Sebastian Lague's repository about neural networks was extremely helpful in structuring this project and his video clearly explains the more difficult concepts like backpropagation.
+
+[MNIST Dataset](http://yann.lecun.com/exdb/mnist/) - Yann Lecun's MNIST dataset provided a practical application of neural networks that is also widely known, allowing me to use PyNet as a Python package and benchmark its performance.
