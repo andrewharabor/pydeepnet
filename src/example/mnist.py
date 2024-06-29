@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from tarfile import TarFile, open
-
 import numpy as np
 
 from pynet import NeuralNetwork
@@ -30,13 +28,11 @@ EPOCHS: Int64 = Int64(15)
 BATCH_SIZE: Int64 = Int64(32)
 
 # Load MNIST data
-data_file: TarFile
-with open(f"{BASE_PATH}/data.tar.gz", "r:gz") as data_file:
-    data_file.extractall(BASE_PATH)
-train_inputs: NDArray = np.load(f"{DATA_PATH}/train_inputs.npy")
-train_targets: NDArray = np.load(f"{DATA_PATH}/train_targets.npy")
-test_inputs: NDArray = np.load(f"{DATA_PATH}/test_inputs.npy")
-test_targets: NDArray = np.load(f"{DATA_PATH}/test_targets.npy")
+with np.load(f"{BASE_PATH}/data.npz") as data:
+    train_inputs = data["train_inputs"]
+    train_targets = data["train_targets"]
+    test_inputs = data["test_inputs"]
+    test_targets = data["test_targets"]
 
 # Create, train, and evaluate neural network
 network: NeuralNetwork = NeuralNetwork(
