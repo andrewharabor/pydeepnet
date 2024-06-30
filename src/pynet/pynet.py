@@ -6,6 +6,7 @@ from .layers import DenseLayer, DenseOutputLayer, InputLayer
 from .optimizers import Optimizer
 from .typing import *
 
+# Text colors for terminal output during training
 BOLD_COLOR: str = "\033[1m"
 BLUE_COLOR: str = "\033[94m"
 CYAN_COLOR: str = "\033[96m"
@@ -125,13 +126,13 @@ class NeuralNetwork():
             raise AttributeError("No error metric provided")
         return self.error_metric.compute(predictions, targets)
 
-    def save_parameters(self) -> tuple[list[tuple[NDArray, NDArray]], tuple[NDArray, NDArray]]:
+    def get_parameters(self) -> tuple[list[tuple[NDArray, NDArray]], tuple[NDArray, NDArray]]:
         hidden_layers_params: list[tuple[NDArray, NDArray]] = []
         for layer in self.hidden_layers:
             hidden_layers_params.append((layer.weights, layer.biases))
         return hidden_layers_params, (self.output_layer.weights, self.output_layer.biases)
 
-    def load_parameters(self, hidden_layers_params: list[tuple[NDArray, NDArray]], output_layer_params: tuple[NDArray, NDArray]) -> None:
+    def set_parameters(self, hidden_layers_params: list[tuple[NDArray, NDArray]], output_layer_params: tuple[NDArray, NDArray]) -> None:
         if len(hidden_layers_params) != len(self.hidden_layers):
             raise ValueError("Number of hidden layers parameters is incorrect")
         for i, (weights, biases) in enumerate(hidden_layers_params):
