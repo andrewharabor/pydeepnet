@@ -18,8 +18,8 @@ BASE_PATH: str = "src/example"
 # Hyperparameters
 HIDDEN_LAYER_SIZE: Int64 = Int64(200)
 RELU_LEAK: Float64 = Float64(0.01)
-REG_PENALTY: Float64 = Float64(5e-4)
-LEARNING_RATE: Float64 = Float64(0.02)
+REG_PENALTY: Float64 = Float64(0.0001)
+LEARNING_RATE: Float64 = Float64(0.001)
 DECAY_RATE1: Float64 = Float64(0.9)
 DECAY_RATE2: Float64 = Float64(0.999)
 EPOCHS: Int64 = Int64(15)
@@ -51,7 +51,7 @@ network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 #     hidden_layer_biases: NDArray = parameters["hidden_layer_biases"]
 #     output_layer_weights: NDArray = parameters["output_layer_weights"]
 #     output_layer_biases: NDArray = parameters["output_layer_biases"]
-# network.load_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
+# network.set_parameters([(hidden_layer_weights, hidden_layer_biases)], (output_layer_weights, output_layer_biases))
 # if network.input_layer.normalizer is not None:
 #     network.input_layer.normalizer.fit(train_inputs)  # normalizer is only fit to inputs in the `NeuralNetwork.train()` method
 

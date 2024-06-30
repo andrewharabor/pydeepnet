@@ -75,9 +75,9 @@ In terms of network architecture, I settled on a single hidden layer with 200 no
 
 ### Model Performance
 
-After training the model for about 15 epochs (which took about an hour or so on my laptop), I was able to achieve parameters for the network that resulted in 95.06% accuracy for the training set and 94.81% accuracy for the test set. (A cross-validation set was not used for simplicity.) These parameters can be found in [`parameters.npz`](src/example/parameters.npz) and the commented-out code in [`mnist.py`](src/example/mnist.py) shows how they can be loaded into the model.
+After training the model for about 15 epochs (which took about an hour or so on my laptop), I was able to achieve parameters for the network that resulted in 97.67% accuracy for the training set and 96.57% accuracy for the test set (a cross-validation set was not used for simplicity). These parameters can be found in [`parameters.npz`](src/example/parameters.npz) and the commented-out code in [`mnist.py`](src/example/mnist.py) shows how they can be loaded into the model.
 
-Unfortunately, 95% accuracy pales in comparison to the most optimized models, which score upwards of 99.5% in accuracy. Even the short script found on the [TensorFlow home page](https://www.tensorflow.org/) can achieve over 97% accuracy after only a few minutes of training:
+Unfortunately, 97% accuracy pales in comparison to the most optimized models, which score upwards of 99.5% in accuracy. Even the short script on the [TensorFlow home page](https://www.tensorflow.org/) can achieve similar if not slightly better results after only a few minutes of training:
 
 ``` python
 import tensorflow as tf
@@ -101,7 +101,7 @@ model.fit(x_train, y_train, epochs=5)
 model.evaluate(x_test, y_test)
 ```
 
-That being said, comparing my "library" to [TensorFlow](https://www.tensorflow.org/), which is made for large-scale deep learning applications, may be a bit unfair. PyNet's sluggish performance makes sense given that it is all in native Python (despite computations with [NumPy](https://numpy.org/)) and considering that everything was written from scratch aside from linear algebra computations, 95% accuracy is not terrible. With a more powerful machine and more hyperparameter/network architecture tuning, PyNet could likely achieve closer to 97% or even 98% accuracy.
+That being said, comparing my "library" to [TensorFlow](https://www.tensorflow.org/), which is made for large-scale deep learning applications, may be a bit unfair. PyNet's sluggish performance makes sense given that it is all in native Python (despite computations with [NumPy](https://numpy.org/)) and considering that everything was written from scratch, 97% accuracy is not terrible. A machine more powerful than my laptop would allow for a more complex architecture and with some hyperparameter tuning, PyNet could likely achieve closer to 99% accuracy.
 
 ## Limitations
 
@@ -123,4 +123,4 @@ As stated multiple times already, PyNet is not intended to be used as a library,
 
 [Neural-Network-Experiments](https://github.com/SebLague/Neural-Network-Experiments) - Sebastian Lague's repository about neural networks was extremely helpful in structuring this project and his video clearly explains the more difficult concepts like backpropagation.
 
-[MNIST Dataset](http://yann.lecun.com/exdb/mnist/) - Yann Lecun's MNIST dataset provided a practical application of neural networks that is also widely known, allowing me to use PyNet as a Python package and benchmark its performance.
+[MNIST Dataset](http://yann.lecun.com/exdb/mnist/) - Yann Lecun's MNIST dataset provided a practical application of neural networks that is also widely known, allowing me to use PyNet in a "mini project" of sorts and benchmark its performance.
