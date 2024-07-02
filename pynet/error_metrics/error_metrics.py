@@ -19,10 +19,24 @@ class ErrorMetric(ABC):
 class MeanAbsolutePercentageError(ErrorMetric):
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
         self._assert_shapes(predictions, targets)
-        return npla.norm((predictions - targets) / targets, ord=1) / predictions.shape[0]
+        return 100 * npla.norm((predictions - targets) / targets, ord=1) / predictions.shape[0]
 
 
-class PercentCorrect(ErrorMetric):
+class PercentageAccuracy(ErrorMetric):
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
         self._assert_shapes(predictions, targets)
-        return np.sum(np.argmax(predictions, axis=1) == np.argmax(targets, axis=1)) / predictions.shape[0]
+        self._assert_probabilities(predictions)
+        self._assert_one_hot(targets)
+        return 100 * np.sum(np.argmax(predictions, axis=1) == np.argmax(targets, axis=1)) / predictions.shape[0]
+
+    def _assert_probabilities(self, predictions: NDArray) -> None:
+        if np.any(predictions < 0) or np.any(predictions > 1):
+            raise ValueError("Predictions are not valid probabilities")
+        if not np.allclose(np.sum(predictions, axis=1), 1):
+            raise ValueError("Predictions do not make up a valid probability distribution")
+
+    def _assert_one_hot(self, targets: NDArray) -> None:
+        if not np.all(np.isin(targets, [0, 1])):
+            raise ValueError("Targets are not one-hot encoded")
+        if np.all(np.sum(targets, axis=1) != 1):
+            raise ValueError("Targets do not make up a valid one-hot encoding")

@@ -7,7 +7,7 @@ import numpy as np
 from pynet import Float64, Int64, NDArray, NeuralNetwork
 from pynet.activation_funcs import ReLU, Softmax
 from pynet.cost_funcs import CrossEntropy
-from pynet.error_metrics import PercentCorrect
+from pynet.error_metrics import PercentageAccuracy
 from pynet.layers import DenseLayer, DenseOutputLayer, InputLayer
 from pynet.normalizers import ZScore
 from pynet.optimizers import Adam
@@ -40,7 +40,7 @@ network: NeuralNetwork = NeuralNetwork(
     ],
     DenseOutputLayer(Int64(train_targets.shape[1]), Softmax(), ElasticNet(REG_PENALTY, REG_PENALTY), CrossEntropy()),
     Adam(LEARNING_RATE, DECAY_RATE1, DECAY_RATE2),
-    PercentCorrect()
+    PercentageAccuracy()
 )
 
 network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
@@ -57,5 +57,5 @@ network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 
 train_predictions: NDArray = network.predict(train_inputs)
 test_predictions: NDArray = network.predict(test_inputs)
-print(f"Train Data Accuracy: {(100 * network.evaluate(train_predictions, train_targets)):.2f}%")
-print(f"Test Data Accuracy: {(100 * network.evaluate(test_predictions, test_targets)):.2f}%")
+print(f"Train Data Accuracy: {network.evaluate(train_predictions, train_targets):.2f}%")
+print(f"Test Data Accuracy: {network.evaluate(test_predictions, test_targets):.2f}%")
