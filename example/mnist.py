@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 
 from pynet import NeuralNetwork
@@ -12,8 +14,8 @@ from pynet.optimizers import Adam
 from pynet.regularizers import ElasticNet
 from pynet.typing import Float64, Int64, NDArray
 
-# Path to this file's directory
-BASE_PATH: str = "src/example"
+# Path to current working directory
+CWD: Path = Path(__file__).resolve().parent
 
 # Hyperparameters
 HIDDEN_LAYER_SIZE: Int64 = Int64(200)
@@ -26,7 +28,7 @@ EPOCHS: Int64 = Int64(15)
 BATCH_SIZE: Int64 = Int64(32)
 
 # Load MNIST data
-with np.load(f"{BASE_PATH}/data.npz") as data:
+with np.load(CWD / "data.npz") as data:
     train_inputs: NDArray = data["train_inputs"]
     train_targets: NDArray = data["train_targets"]
     test_inputs: NDArray = data["test_inputs"]
@@ -46,7 +48,7 @@ network: NeuralNetwork = NeuralNetwork(
 network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 
 # Load previously trained parameters instead of training
-# with np.load(f"{BASE_PATH}/parameters.npz") as parameters:
+# with np.load(BASE_PATH / "parameters.npz") as parameters:
 #     hidden_layer_weights: NDArray = parameters["hidden_layer_weights"]
 #     hidden_layer_biases: NDArray = parameters["hidden_layer_biases"]
 #     output_layer_weights: NDArray = parameters["output_layer_weights"]
