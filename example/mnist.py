@@ -13,8 +13,7 @@ from pynet.normalizers import ZScore
 from pynet.optimizers import Adam
 from pynet.regularizers import ElasticNet
 
-# Path to current working directory
-CWD: Path = Path(__file__).resolve().parent
+CWD: Path = Path(__file__).resolve().parent  # path to current working directory
 
 # Hyperparameters
 HIDDEN_LAYER_SIZE: Int64 = Int64(200)
@@ -47,7 +46,7 @@ network: NeuralNetwork = NeuralNetwork(
 network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 
 # Load previously trained parameters instead of training
-# with np.load(BASE_PATH / "parameters.npz") as parameters:
+# with np.load(CWD / "parameters.npz") as parameters:
 #     hidden_layer_weights: NDArray = parameters["hidden_layer_weights"]
 #     hidden_layer_biases: NDArray = parameters["hidden_layer_biases"]
 #     output_layer_weights: NDArray = parameters["output_layer_weights"]
@@ -58,5 +57,5 @@ network.train(train_inputs, train_targets, EPOCHS, BATCH_SIZE)
 
 train_predictions: NDArray = network.predict(train_inputs)
 test_predictions: NDArray = network.predict(test_inputs)
-print(f"Train Data Accuracy: {(100 * network.evaluate(train_targets, train_predictions)):.2f}%")
-print(f"Test Data Accuracy: {(100 * network.evaluate(test_targets, test_predictions)):.2f}%")
+print(f"Train Data Accuracy: {(100 * network.evaluate(train_predictions, train_targets)):.2f}%")
+print(f"Test Data Accuracy: {(100 * network.evaluate(test_predictions, test_targets)):.2f}%")
