@@ -93,7 +93,7 @@ class NeuralNetwork():
                 self.output_layer.biases_gradient /= examples
                 self.optimizer.update_parameters(self.hidden_layers + [self.output_layer])
                 if verbose:
-                    self._print_progress(self._progress_bar_size, Int64(iteration), epochs, Int64(batch), num_batches, cost)
+                    self._print_progress(self._progress_bar_size, Int64(iteration), epochs, Int64(batch), num_batches, cost / examples)
             if verbose:
                 print()
         if verbose:
@@ -147,4 +147,4 @@ class NeuralNetwork():
 
     def _print_progress(self, size: Int64, iteration: Int64, epochs: Int64, batch: Int64, max_batch: Int64, cost: Float64) -> None:
         progress_bar: str = BOLD_COLOR + "[" + GREEN_COLOR + ("#" * round(batch / max_batch * size)) + END_COLOR + BOLD_COLOR + ("=" * round((max_batch - batch) / max_batch * size)) + "]" + END_COLOR
-        print(f"Epoch {BLUE_COLOR}{iteration}{END_COLOR}/{epochs} ({(iteration / epochs * 100):.2f}%)     {progress_bar} Batch {CYAN_COLOR}{batch}{END_COLOR}/{max_batch} ({(batch / max_batch * 100):.2f}%)     Cost = {PINK_COLOR}{cost}{END_COLOR}", end="\r")
+        print(f"Epoch {BLUE_COLOR}{iteration}{END_COLOR}/{epochs} ({(iteration / epochs * 100):.2f}%)     {progress_bar} Batch {CYAN_COLOR}{batch}{END_COLOR}/{max_batch} ({(batch / max_batch * 100):.2f}%)     Cost per example = {PINK_COLOR}{cost}{END_COLOR}", end="\r")
