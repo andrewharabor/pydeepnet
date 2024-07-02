@@ -1,8 +1,6 @@
 
-from abc import ABC, abstractmethod
-
+from pynet._typing import *
 from pynet.layers import *
-from pynet.typing import *
 
 
 class Optimizer(ABC):

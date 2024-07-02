@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
-from pynet import NeuralNetwork
+from pynet import Float64, Int64, NDArray, NeuralNetwork
 from pynet.activation_funcs import ReLU, Softmax
 from pynet.cost_funcs import CrossEntropy
 from pynet.error_metrics import PercentCorrect
@@ -12,7 +12,6 @@ from pynet.layers import DenseLayer, DenseOutputLayer, InputLayer
 from pynet.normalizers import ZScore
 from pynet.optimizers import Adam
 from pynet.regularizers import ElasticNet
-from pynet.typing import Float64, Int64, NDArray
 
 # Path to current working directory
 CWD: Path = Path(__file__).resolve().parent

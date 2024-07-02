@@ -1,11 +1,9 @@
 
-from abc import ABC, abstractmethod
-
+from pynet._typing import *
 from pynet.activation_funcs import *
 from pynet.cost_funcs import *
 from pynet.normalizers import *
 from pynet.regularizers import *
-from pynet.typing import *
 
 
 class Layer(ABC):

@@ -1,7 +1,5 @@
 
-from abc import ABC, abstractmethod
-
-from pynet.typing import *
+from pynet._typing import *
 
 
 class ErrorMetric(ABC):

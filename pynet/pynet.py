@@ -1,10 +1,10 @@
 
 from time import time
 
+from ._typing import *
 from .error_metrics import ErrorMetric
 from .layers import DenseLayer, DenseOutputLayer, InputLayer
 from .optimizers import Optimizer
-from .typing import *
 
 # Text colors for terminal output during training
 BOLD_COLOR: str = "\033[1m"
