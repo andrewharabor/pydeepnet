@@ -1,5 +1,7 @@
 # PyDeepNet
 
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fandrewharabor%2Fpydeepnet&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Views&edge_flat=false)](https://hits.seeyoufarm.com)
+
 PyDeepNet is a Python "package" for neural networks built from scratch. It utilizes only [NumPy](https://numpy.org/) for efficient linear algebra operations and is meant to mirror [TensorFlow](https://www.tensorflow.org/) in terms of its interface and core capabilities.
 
 > **Disclaimer:** PyDeepNet is not actually a Python package (hence the quotation marks). It is not published on [PyPI](https://pypi.org/), does not have any official releases, and has not been formally tested. PyDeepNet was created as an exercise in writing neural networks from scratch and should not be used for anything serious (use a library like [TensorFlow](https://www.tensorflow.org/) or [PyTorch](https://pytorch.org/) instead).
@@ -124,5 +126,3 @@ As stated multiple times already, PyDeepNet is not intended to be used as a libr
 [Neural-Network-Experiments](https://github.com/SebLague/Neural-Network-Experiments) - Sebastian Lague's repository about neural networks was extremely helpful in structuring this project and his video clearly explains the more difficult concepts like backpropagation.
 
 [MNIST Dataset](http://yann.lecun.com/exdb/mnist/) - Yann Lecun's MNIST dataset provided a practical application of neural networks that is also widely known, allowing me to use PyDeepNet in a "mini project" of sorts and benchmark its performance.
-
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fandrewharabor%2Fpydeepnet&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Views&edge_flat=false)](https://hits.seeyoufarm.com)
