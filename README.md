@@ -124,3 +124,5 @@ As stated multiple times already, PyDeepNet is not intended to be used as a libr
 [Neural-Network-Experiments](https://github.com/SebLague/Neural-Network-Experiments) - Sebastian Lague's repository about neural networks was extremely helpful in structuring this project and his video clearly explains the more difficult concepts like backpropagation.
 
 [MNIST Dataset](http://yann.lecun.com/exdb/mnist/) - Yann Lecun's MNIST dataset provided a practical application of neural networks that is also widely known, allowing me to use PyDeepNet in a "mini project" of sorts and benchmark its performance.
+
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fandrewharabor%2Fpydeepnet&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Views&edge_flat=false)](https://hits.seeyoufarm.com)
