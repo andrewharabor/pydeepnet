@@ -4,14 +4,14 @@ from pathlib import Path
 
 import numpy as np
 
-from pynet import Float64, Int64, NDArray, NeuralNetwork
-from pynet.activation_funcs import ReLU, Softmax
-from pynet.cost_funcs import CrossEntropy
-from pynet.error_metrics import PercentageAccuracy
-from pynet.layers import DenseLayer, DenseOutputLayer, InputLayer
-from pynet.normalizers import ZScore
-from pynet.optimizers import Adam
-from pynet.regularizers import ElasticNet
+from pydeepnet import Float64, Int64, NDArray, NeuralNetwork
+from pydeepnet.activation_funcs import ReLU, Softmax
+from pydeepnet.cost_funcs import CrossEntropy
+from pydeepnet.error_metrics import PercentageAccuracy
+from pydeepnet.layers import DenseLayer, DenseOutputLayer, InputLayer
+from pydeepnet.normalizers import ZScore
+from pydeepnet.optimizers import Adam
+from pydeepnet.regularizers import ElasticNet
 
 CWD: Path = Path(__file__).resolve().parent  # path to current working directory
 

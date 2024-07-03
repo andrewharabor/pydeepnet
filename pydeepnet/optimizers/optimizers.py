@@ -1,6 +1,6 @@
 
-from pynet._typing import *
-from pynet.layers import *
+from pydeepnet._typing import *
+from pydeepnet.layers import *
 
 
 class Optimizer(ABC):

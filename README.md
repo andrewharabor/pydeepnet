@@ -1,40 +1,40 @@
-# PyNet
+# PyDeepNet
 
-PyNet is a Python "package" for neural networks built from scratch. It utilizes only [NumPy](https://numpy.org/) for efficient linear algebra operations and is meant to mirror [TensorFlow](https://www.tensorflow.org/) in terms of its interface and core capabilities.
+PyDeepNet is a Python "package" for neural networks built from scratch. It utilizes only [NumPy](https://numpy.org/) for efficient linear algebra operations and is meant to mirror [TensorFlow](https://www.tensorflow.org/) in terms of its interface and core capabilities.
 
-> **Disclaimer:** PyNet is not actually a Python package (hence the quotation marks). It is not published on [PyPI](https://pypi.org/), does not have any official releases, and has not been formally tested. PyNet was created as an exercise in writing neural networks from scratch and should not be used for anything serious (use a library like [TensorFlow](https://www.tensorflow.org/) or [PyTorch](https://pytorch.org/) instead).
+> **Disclaimer:** PyDeepNet is not actually a Python package (hence the quotation marks). It is not published on [PyPI](https://pypi.org/), does not have any official releases, and has not been formally tested. PyDeepNet was created as an exercise in writing neural networks from scratch and should not be used for anything serious (use a library like [TensorFlow](https://www.tensorflow.org/) or [PyTorch](https://pytorch.org/) instead).
 
 ## Basic Usage
 
-PyNet can be imported by:
+PyDeepNet can be imported by:
 
 ``` python
-import pynet
+import pydeepnet
 ```
 
 Or alternatively as:
 
 ``` python
-import pynet as pn
+import pydeepnet as pdn
 ```
 
-It may be more useful to directly import the required classes from PyNet and its submodules:
+It may be more useful to directly import the required classes from PyDeepNet and its submodules:
 
 ``` python
-from pynet import NeuralNetwork
-from pynet.activation_funcs import Softmax
-from pynet.typing import Float64, NDArray
+from pydeepnet import NeuralNetwork
+from pydeepnet.activation_funcs import Softmax
+from pydeepnet.typing import Float64, NDArray
 ```
 
-The core of PyNet is the `NeuralNetwork` class and the `NDArray` data structure, which is just an alias for a [NumPy array](https://numpy.org/doc/stable/reference/generated/numpy.array.html). To fully instantiate a `NeuralNetwork`, other classes like a `Layer` and `Optimizer` are required, which in turn may utilize other classes. For example:
+The core of PyDeepNet is the `NeuralNetwork` class and the `NDArray` data structure, which is just an alias for a [NumPy array](https://numpy.org/doc/stable/reference/generated/numpy.array.html). To fully instantiate a `NeuralNetwork`, other classes like a `Layer` and `Optimizer` are required, which in turn may utilize other classes. For example:
 
 ``` python
-from pynet import NeuralNetwork
-from pynet.activation_funcs import Linear, Sigmoid
-from pynet.cost_funcs import MeanSquaredError
-from pynet.layers import DenseLayer, DenseOutputLayer, InputLayer
-from pynet.optimizers import GradientDescent
-from pynet.typing import Float64, Int64, NDArray
+from pydeepnet import NeuralNetwork
+from pydeepnet.activation_funcs import Linear, Sigmoid
+from pydeepnet.cost_funcs import MeanSquaredError
+from pydeepnet.layers import DenseLayer, DenseOutputLayer, InputLayer
+from pydeepnet.optimizers import GradientDescent
+from pydeepnet.typing import Float64, Int64, NDArray
 
 network: NeuralNetwork = NeuralNetwork(
     InputLayer(Int64(10), None),
@@ -59,11 +59,11 @@ predictions: NDArray = network.predict(test_inputs)
 
 This trains the network for 5 epochs and a mini batch size of 32. Afterwards, the network's predictions are stored in an array.
 
-For a more detailed description of what PyNet provides, see the [documentation](DOCUMENTATION.md).
+For a more detailed description of what PyDeepNet provides, see the [documentation](DOCUMENTATION.md).
 
 ## Example - MNIST Digit Classification
 
-In [`mnist.py`](src/example/mnist.py), there is a complete example of how PyNet might be used to classify digits from the [MNIST](http://yann.lecun.com/exdb/mnist/) dataset.
+In [`mnist.py`](src/example/mnist.py), there is a complete example of how PyDeepNet might be used to classify digits from the [MNIST](http://yann.lecun.com/exdb/mnist/) dataset.
 
 ### Data Format and Preprocessing
 
@@ -101,11 +101,11 @@ model.fit(x_train, y_train, epochs=5)
 model.evaluate(x_test, y_test)
 ```
 
-That being said, comparing my "library" to [TensorFlow](https://www.tensorflow.org/), which is made for large-scale deep learning applications, may be a bit unfair. PyNet's sluggish performance makes sense given that it is all in native Python (despite computations with [NumPy](https://numpy.org/)) and considering that everything was written from scratch, 97% accuracy is not terrible. A machine more powerful than my laptop would allow for a more complex architecture and with some hyperparameter tuning, PyNet could likely achieve closer to 99% accuracy.
+That being said, comparing my "library" to [TensorFlow](https://www.tensorflow.org/), which is made for large-scale deep learning applications, may be a bit unfair. PyDeepNet's sluggish performance makes sense given that it is all in native Python (despite computations with [NumPy](https://numpy.org/)) and considering that everything was written from scratch, 97% accuracy is not terrible. A machine more powerful than my laptop would allow for a more complex architecture and with some hyperparameter tuning, PyDeepNet could likely achieve closer to 99% accuracy.
 
 ## Limitations
 
-As stated multiple times already, PyNet is not intended to be used as a library, even though this repository is structured like a Python package. The goal of this project was for me to deepen my understanding of neural networks by implementing one from scratch. Framing it as a package allowed me to consider the structure of the code and input validation though the main focus was on the machine learning concepts. That being said, here are some limitations with this project and concrete TODOs in order to turn PyNet into an actual package:
+As stated multiple times already, PyDeepNet is not intended to be used as a library, even though this repository is structured like a Python package. The goal of this project was for me to deepen my understanding of neural networks by implementing one from scratch. Framing it as a package allowed me to consider the structure of the code and input validation though the main focus was on the machine learning concepts. That being said, here are some limitations with this project and concrete TODOs in order to turn PyDeepNet into an actual package:
 
 - **Limitation #1:** _Python is slow._ [NumPy](https://numpy.org/) was used for all linear algebra and array operations and everything is about as vectorized as possible (no explicit `for`-loops when it comes to array computations). Despite this, all of the code is in native Python and so the frequent iteration through layers during forward passes and backpropagation creates overhead. When processing 60,000 examples for 15 epochs (see the [MNIST example](README.md#example---mnist-digit-classification)), it adds up and results in an excruciatingly slow training process.
 
@@ -113,16 +113,14 @@ As stated multiple times already, PyNet is not intended to be used as a library,
 
 - **Limitation #2:** _I (probably) wrote more bugs than tests._ While the code does run, I don't claim it to be perfect. I did catch a few bugs but no doubt there are more. To make matters worse, I did not write any tests (even though this is supposed to be a package). I wanted to focus more on the machine learning concepts in this project and not worry about writing tests for functions that mainly perform mathematical computations. That being said, I did include significant input validation for most methods which at least ensures there are no obvious errors in usage.
 
-- **Solution #2:** _Sit down and write tests, there's no easy way around it._ If I did intend to turn this project into an actual package, this would likely be the next step in doing so. Aside from being good practice when it comes to writing code, tests would make sure that PyNet actually works as intended. But while tests would definitely help me write more robust code in the future and allow me to learn about test-driven development first-hand, it would require significant time commitment and not directly contribute to my knowledge of machine learning and neural networks.
+- **Solution #2:** _Sit down and write tests, there's no easy way around it._ If I did intend to turn this project into an actual package, this would likely be the next step in doing so. Aside from being good practice when it comes to writing code, tests would make sure that PyDeepNet actually works as intended. But while tests would definitely help me write more robust code in the future and allow me to learn about test-driven development first-hand, it would require significant time commitment and not directly contribute to my knowledge of machine learning and neural networks.
 
 ## Acknowledgements
 
-[NumPy](https://numpy.org/) - Used throughout PyNet for its efficient linear algebra capabilities and has made up the foundation of this project.
+[NumPy](https://numpy.org/) - Used throughout PyDeepNet for its efficient linear algebra capabilities and has made up the foundation of this project.
 
 [Coursera Machine Learning Specialization](https://www.coursera.org/specializations/machine-learning-introduction) - I learned a lot about neural networks by taking this course and this project helped strengthen my understanding of deep learning.
 
 [Neural-Network-Experiments](https://github.com/SebLague/Neural-Network-Experiments) - Sebastian Lague's repository about neural networks was extremely helpful in structuring this project and his video clearly explains the more difficult concepts like backpropagation.
 
-[MNIST Dataset](http://yann.lecun.com/exdb/mnist/) - Yann Lecun's MNIST dataset provided a practical application of neural networks that is also widely known, allowing me to use PyNet in a "mini project" of sorts and benchmark its performance.
-
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fandrewharabor%2Fpynet&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Views&edge_flat=false)](https://hits.seeyoufarm.com)
+[MNIST Dataset](http://yann.lecun.com/exdb/mnist/) - Yann Lecun's MNIST dataset provided a practical application of neural networks that is also widely known, allowing me to use PyDeepNet in a "mini project" of sorts and benchmark its performance.

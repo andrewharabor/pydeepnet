@@ -1,5 +1,5 @@
 
-from pynet._typing import *
+from pydeepnet._typing import *
 
 
 class ActivationFunc(ABC):

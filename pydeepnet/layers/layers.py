@@ -1,9 +1,9 @@
 
-from pynet._typing import *
-from pynet.activation_funcs import *
-from pynet.cost_funcs import *
-from pynet.normalizers import *
-from pynet.regularizers import *
+from pydeepnet._typing import *
+from pydeepnet.activation_funcs import *
+from pydeepnet.cost_funcs import *
+from pydeepnet.normalizers import *
+from pydeepnet.regularizers import *
 
 
 class Layer(ABC):
