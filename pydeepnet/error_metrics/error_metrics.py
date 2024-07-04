@@ -17,9 +17,11 @@ class ErrorMetric(ABC):
 
 
 class MeanAbsolutePercentageError(ErrorMetric):
+    offset: Float64 = Float64(1e-9)
+
     def compute(self, predictions: NDArray, targets: NDArray) -> Float64:
         self._assert_shapes(predictions, targets)
-        return 100 * npla.norm((predictions - targets) / targets, ord=1) / predictions.shape[0]
+        return 100 * np.sum(np.abs((predictions - targets) / (targets + self.offset))) / np.prod(predictions.shape)
 
 
 class PercentageAccuracy(ErrorMetric):
