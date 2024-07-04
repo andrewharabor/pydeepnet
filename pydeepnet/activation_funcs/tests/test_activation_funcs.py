@@ -233,7 +233,7 @@ class TestSiLU():
             self.silu.derivative(np.array([]))
 
 
-class TestSoftmax:
+class TestSoftmax():
     softmax: Softmax = Softmax()
 
     def test_compute(self) -> None:
@@ -279,7 +279,7 @@ class TestSoftmax:
             self.softmax.derivative(np.array([]))
 
 
-class TestSoftplus:
+class TestSoftplus():
     softplus: Softplus = Softplus()
 
     def test_compute(self) -> None:
@@ -325,7 +325,7 @@ class TestSoftplus:
             self.softplus.derivative(np.array([]))
 
 
-class TestTanh:
+class TestTanh():
     tanh: Tanh = Tanh()
 
     def test_compute(self) -> None:
