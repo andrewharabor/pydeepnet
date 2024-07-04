@@ -16,7 +16,7 @@ class Optimizer(ABC):
 
     def _assert_initialized(self) -> None:
         if not self._initialized:
-            raise Exception("Optimizer not initialized")
+            raise RuntimeError("Optimizer not initialized through `initialize()`")
 
     def _assert_positive(self, learning_rate: Float64) -> None:
         if learning_rate <= 0:

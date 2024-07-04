@@ -99,15 +99,15 @@ class DenseLayer(Layer):
 
     def _assert_parameters_initialized(self) -> None:
         if not self._parameters_initialized:
-            raise ValueError("Parameters have not been initialized")
+            raise RuntimeError("Parameters have not been initialized through `initialize_parameters()`")
 
     def _assert_gradients_initialized(self) -> None:
         if not self._gradients_initialized:
-            raise ValueError("Gradients have not been initialized")
+            raise RuntimeError("Gradients have not been initialized through `initialize_gradients()`")
 
     def _assert_inputs_stored(self) -> None:
         if not self._inputs_stored:
-            raise ValueError("Inputs have not been stored through forward propagation")
+            raise RuntimeError("Inputs have not been stored through `forward propagation()`")
 
 
 class DenseOutputLayer(DenseLayer):

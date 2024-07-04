@@ -21,9 +21,9 @@ class Normalizer(ABC):
         if inputs.shape[0] == 0:
             raise ValueError("Inputs array is empty")
 
-    def _assert_adapted(self) -> None:
+    def _assert_fit(self) -> None:
         if not self._adapted:
-            raise ValueError("Normalizer has not been adapted to input data")
+            raise RuntimeError("Normalizer has not been fit to input data through `fit()`")
 
 
 class DecimalScaling(Normalizer):
@@ -36,12 +36,12 @@ class DecimalScaling(Normalizer):
 
     def transform(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
-        self._assert_adapted()
+        self._assert_fit()
         return inputs / (10 ** self.scale)
 
     def undo(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
-        self._assert_adapted()
+        self._assert_fit()
         return inputs * (10 ** self.scale)
 
 
@@ -57,13 +57,13 @@ class MinMax(Normalizer):
 
     def transform(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
-        self._assert_adapted()
+        self._assert_fit()
         diff: NDArray = self.max - self.min
         return (inputs - self.min) / np.where(diff == 0, 1, diff)  # Prevent division by zero
 
     def undo(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
-        self._assert_adapted()
+        self._assert_fit()
         return inputs * (self.max - self.min) + self.min
 
 
@@ -80,10 +80,10 @@ class ZScore(Normalizer):
 
     def transform(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
-        self._assert_adapted()
+        self._assert_fit()
         return (inputs - self.mean) / self.std_dev
 
     def undo(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
-        self._assert_adapted()
+        self._assert_fit()
         return inputs * self.std_dev + self.mean
