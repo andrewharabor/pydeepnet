@@ -4,7 +4,7 @@
 
 PyDeepNet is a Python "package" for neural networks built from scratch. It utilizes only [NumPy](https://numpy.org/) for efficient linear algebra operations and is meant to mirror [TensorFlow](https://www.tensorflow.org/) in terms of its interface and core capabilities.
 
-> **Disclaimer:** PyDeepNet is not actually a Python package (hence the quotation marks). It is not published on [PyPI](https://pypi.org/) and does not have any official releases. PyDeepNet was created as an exercise in neural networks and should not be used for anything serious (use a library like [TensorFlow](https://www.tensorflow.org/) or [PyTorch](https://pytorch.org/) instead).
+> **Disclaimer:** PyDeepNet is not actually a Python package (hence the quotation marks). It is not published on [PyPI](https://pypi.org/), lacks documentation, and does not have any official releases. PyDeepNet was created as an exercise in neural networks and should not be used for anything serious (use a library like [TensorFlow](https://www.tensorflow.org/) or [PyTorch](https://pytorch.org/) instead).
 
 ## Basic Usage
 
@@ -60,8 +60,6 @@ predictions: NDArray = network.predict(test_inputs)
 ```
 
 This trains the network for 5 epochs and a mini batch size of 32. Afterwards, the network's predictions are stored in an array.
-
-For a more detailed description of what PyDeepNet provides, see the [documentation](DOCUMENTATION.md).
 
 ## Example - MNIST Digit Classification
 
