@@ -20,7 +20,7 @@ class Regularizer(ABC):
             raise ValueError("Penalty is negative")
 
 
-class L1Norm(Regularizer):
+class Lasso(Regularizer):
     penalty: Float64
 
     def __init__(self, penalty: Float64) -> None:
@@ -36,7 +36,7 @@ class L1Norm(Regularizer):
         return self.penalty * np.sign(weights)
 
 
-class L2Norm(Regularizer):
+class Ridge(Regularizer):
     penalty: Float64
 
     def __init__(self, penalty: Float64) -> None:
@@ -53,19 +53,19 @@ class L2Norm(Regularizer):
 
 
 class ElasticNet(Regularizer):
-    l1_regularizer: L1Norm
-    l2_regularizer: L2Norm
+    lasso: Lasso
+    ridge: Ridge
 
-    def __init__(self, l1_penalty: Float64, l2_penalty: Float64) -> None:
-        self._assert_non_negative(l1_penalty)
-        self._assert_non_negative(l2_penalty)
-        self.l1_regularizer = L1Norm(l1_penalty)
-        self.l2_regularizer = L2Norm(l2_penalty)
+    def __init__(self, lasso_penalty: Float64, ridge_penalty: Float64) -> None:
+        self._assert_non_negative(lasso_penalty)
+        self._assert_non_negative(ridge_penalty)
+        self.lasso = Lasso(lasso_penalty)
+        self.ridge = Ridge(ridge_penalty)
 
     def compute(self, weights: NDArray) -> Float64:
         self._assert_shape(weights)
-        return self.l1_regularizer.compute(weights) + self.l2_regularizer.compute(weights)
+        return self.lasso.compute(weights) + self.ridge.compute(weights)
 
     def derivative(self, weights: NDArray) -> NDArray:
         self._assert_shape(weights)
-        return self.l1_regularizer.derivative(weights) + self.l2_regularizer.derivative(weights)
+        return self.lasso.derivative(weights) + self.ridge.derivative(weights)
