@@ -32,7 +32,8 @@ class DecimalScaling(Normalizer):
     def fit(self, inputs: NDArray) -> None:
         self._assert_shape(inputs)
         self._adapted = True
-        self.scale = np.ceil(np.log10(np.max(np.abs(inputs))))
+        self.scale = np.ceil(np.log10(np.maximum(np.max(np.abs(inputs)), 1.0)))
+        self.scale = np.where(self.scale < 0, 0, self.scale)  # Prevent scaling by negative power of ten
 
     def transform(self, inputs: NDArray) -> NDArray:
         self._assert_shape(inputs)
