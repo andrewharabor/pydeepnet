@@ -4,7 +4,7 @@
 
 PyDeepNet is a Python "package" for neural networks built from scratch. It utilizes only [NumPy](https://numpy.org/) for efficient linear algebra operations and is meant to mirror [TensorFlow](https://www.tensorflow.org/) in terms of its interface and core capabilities.
 
-> **Disclaimer:** PyDeepNet is not actually a Python package (hence the quotation marks). It is not published on [PyPI](https://pypi.org/), does not have any official releases, and has not been formally tested. PyDeepNet was created as an exercise in writing neural networks from scratch and should not be used for anything serious (use a library like [TensorFlow](https://www.tensorflow.org/) or [PyTorch](https://pytorch.org/) instead).
+> **Disclaimer:** PyDeepNet is not actually a Python package (hence the quotation marks). It is not published on [PyPI](https://pypi.org/) and does not have any official releases. PyDeepNet was created as an exercise in neural networks and should not be used for anything serious (use a library like [TensorFlow](https://www.tensorflow.org/) or [PyTorch](https://pytorch.org/) instead).
 
 ## Basic Usage
 
@@ -73,7 +73,7 @@ The original data was downloaded and preprocessed (28x28 images flattened to 784
 
 ### Network Architecture
 
-In terms of network architecture, I settled on a single hidden layer with 200 nodes with a [ReLU](https://en.wikipedia.org/wiki/Rectifier_(neural_networks)) activation function and an [elastic net](https://en.wikipedia.org/wiki/Elastic_net_regularization) regularizer. The output layer uses a [softmax](https://en.wikipedia.org/wiki/Softmax_function) activation, the same regularization, and a [cross-entropy](https://en.wikipedia.org/wiki/Cross-entropy) cost function. For the learning process, I used the [Adam](https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Adam) optimization algorithm. For non-convolutional neural networks, this seems to be a fairly standard set up when it comes to [MNIST](http://yann.lecun.com/exdb/mnist/). After some trial-and-error, I was able to find optimal hyperparameters though better performance can likely be achieved by fine-tuning them more.
+In terms of network architecture, the example uses a single hidden layer with 200 nodes, a [ReLU](https://en.wikipedia.org/wiki/Rectifier_(neural_networks)) activation function, and an [elastic net](https://en.wikipedia.org/wiki/Elastic_net_regularization) regularizer. The output layer uses a [softmax](https://en.wikipedia.org/wiki/Softmax_function) activation, the same regularization, and a [cross-entropy](https://en.wikipedia.org/wiki/Cross-entropy) cost function. Rather than basic gradient descent, the [Adam](https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Adam) optimization algorithm is used for the learning process. For non-convolutional neural networks, this seems to be a fairly standard set up when it comes to [MNIST](http://yann.lecun.com/exdb/mnist/).
 
 ### Model Performance
 
@@ -103,23 +103,21 @@ model.fit(x_train, y_train, epochs=5)
 model.evaluate(x_test, y_test)
 ```
 
-That being said, comparing my "library" to [TensorFlow](https://www.tensorflow.org/), which is made for large-scale deep learning applications, may be a bit unfair. PyDeepNet's sluggish performance makes sense given that it is all in native Python (despite computations with [NumPy](https://numpy.org/)) and considering that everything was written from scratch, 97% accuracy is not terrible. A machine more powerful than my laptop would allow for a more complex architecture and with some hyperparameter tuning, PyDeepNet could likely achieve closer to 99% accuracy.
+That being said, using [TensorFlow](https://www.tensorflow.org/) as a baseline may be a bit unfair as it is optimized for large-scale deep learning applications. Considering that PyDeepNet was written from scratch and is not particularly efficient, 97% accuracy is not terrible. Its sluggish performance is likely due to the fact that it is all in native Python, despite linear algebra computations with [NumPy](https://numpy.org/). With a computer more powerful than my laptop, a more complex architecture could be used, and with some hyperparameter tuning, PyDeepNet could likely achieve closer to 99% accuracy.
 
 ## Limitations
 
-As stated multiple times already, PyDeepNet is not intended to be used as a library, even though this repository is structured like a Python package. The goal of this project was for me to deepen my understanding of neural networks by implementing one from scratch. Framing it as a package allowed me to consider the structure of the code and input validation though the main focus was on the machine learning concepts. That being said, here are some limitations with this project and concrete TODOs in order to turn PyDeepNet into an actual package:
+As stated multiple times already, PyDeepNet is not intended to be used as a library, even though this repository is structured like a Python package. The goal of this project was for me to deepen my understanding of neural networks by implementing one from scratch. Framing it as a package allowed me to consider the structure of the code and write tests though the main focus was on the machine learning concepts.
 
-- **Limitation #1:** _Python is slow._ [NumPy](https://numpy.org/) was used for all linear algebra and array operations and everything is about as vectorized as possible (no explicit `for`-loops when it comes to array computations). Despite this, all of the code is in native Python and so the frequent iteration through layers during forward passes and backpropagation creates overhead. When processing 60,000 examples for 15 epochs (see the [MNIST example](README.md#example---mnist-digit-classification)), it adds up and results in an excruciatingly slow training process.
+The largest bottleneck in PyDeepNet's performance is that Python is slow. While [Numpy](https://numpy.org/) was used extinsively, the code is not optimized for efficiency and so the constant iteration through layers (during forward passes and backpropagation) creates significant overhead. When processing 60,000 images for 15 epochs (see the [MNIST example](README.md#example---mnist-digit-classification)), it adds up and results in an excruciatingly slow training process.
 
-- **(Possible) Solution(s) #1:** _It is possible that more vectorization is in order, which would definitely speed up the computations._ However, this would convolute the code, demand a significant restructuring of the project, and potentially complicate how the gradients in the backpropagation process are calculated (which was already difficult for me to compute by hand). _Alternatively, rewriting the library in C++ and then calling it from Python would work._ While I do need an excuse to write more C++, this would be a difficult task given how low-level the language is and it would end up obfuscating the original goal of this project. Both of these are valid options but, at least in my opinion, not worth actually implementing as the main goal of this project has been satisfied.
-
-- **Limitation #2:** _I (probably) wrote more bugs than tests._ While the code does run, I don't claim it to be perfect. I did catch a few bugs but no doubt there are more. To make matters worse, I did not write any tests (even though this is supposed to be a package). I wanted to focus more on the machine learning concepts in this project and not worry about writing tests for functions that mainly perform mathematical computations. That being said, I did include significant input validation for most methods which at least ensures there are no obvious errors in usage.
-
-- **Solution #2:** _Sit down and write tests, there's no easy way around it._ If I did intend to turn this project into an actual package, this would likely be the next step in doing so. Aside from being good practice when it comes to writing code, tests would make sure that PyDeepNet actually works as intended. But while tests would definitely help me write more robust code in the future and allow me to learn about test-driven development first-hand, it would require significant time commitment and not directly contribute to my knowledge of machine learning and neural networks.
+It is possible that more vectorization is needed, which would definitely speed up the computations. However, this comes with the risk of convoluting the code and would demand a large restructuring of the project. Alternatively, (re)writing PyDeepNet in C++ would give the needed performance boost. Though while this would be extremely helpful in terms of learning C++, the original goal of this project has already been fulfilled and so there's no incentive to rewrite the library simply to optimize its performance.
 
 ## Acknowledgements
 
 [NumPy](https://numpy.org/) - Used throughout PyDeepNet for its efficient linear algebra capabilities and has made up the foundation of this project.
+
+[pytest](https://docs.pytest.org/en/8.2.x/) - Used for writing table-driven tests to ensure that the core of PyDeepNet functions as expected.
 
 [Coursera Machine Learning Specialization](https://www.coursera.org/specializations/machine-learning-introduction) - I learned a lot about neural networks by taking this course and this project helped strengthen my understanding of deep learning.
 
