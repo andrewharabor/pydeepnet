@@ -1,6 +1,4 @@
 
-import pytest
-
 from pydeepnet._typing import *
 from pydeepnet.regularizers import *
 
