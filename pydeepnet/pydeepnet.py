@@ -75,23 +75,23 @@ class NeuralNetwork():
                     outputs: NDArray = self.input_layer.forward_propagation(batch_inputs[i])
                     for layer in self.hidden_layers:
                         outputs = layer.forward_propagation(outputs)
-                        if layer.regularizer is not None:
-                            cost += layer.regularizer.compute(layer.weights)
                     outputs = self.output_layer.forward_propagation(outputs)
                     cost += self.output_layer.cost_func.compute(outputs, batch_targets[i])
-                    if self.output_layer.regularizer is not None:
-                        cost += self.output_layer.regularizer.compute(self.output_layer.weights)
                     # Back propagation
                     derivative: NDArray = self.output_layer.start_back_propagation(batch_targets[i])
                     for layer in reversed(self.hidden_layers):
                         derivative = layer.back_propagation(derivative)
-                # Update parameters
+                # Update parameters and add regularization to cost
                 for layer in self.hidden_layers:
                     layer.weights_gradient /= examples
                     layer.biases_gradient /= examples
+                    if layer.regularizer is not None:
+                        cost += layer.regularizer.compute(layer.weights)
                 self.output_layer.weights_gradient /= examples
                 self.output_layer.biases_gradient /= examples
                 self.optimizer.update_parameters(self.hidden_layers + [self.output_layer])
+                if self.output_layer.regularizer is not None:
+                    cost += self.output_layer.regularizer.compute(self.output_layer.weights)
                 if verbose:
                     self._print_progress(self._progress_bar_size, Int64(iteration), epochs, Int64(batch), num_batches, cost / examples)
             if verbose:
