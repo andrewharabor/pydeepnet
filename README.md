@@ -61,11 +61,11 @@ This trains the network for 5 epochs and a mini batch size of 32. Afterwards, th
 
 ## Example - MNIST Digit Classification
 
-In [`mnist.py`](src/example/mnist.py), there is a complete example of how PyDeepNet might be used to classify digits from the [MNIST](http://yann.lecun.com/exdb/mnist/) dataset.
+In [`mnist.py`](example/mnist.py), there is a complete example of how PyDeepNet might be used to classify digits from the [MNIST](http://yann.lecun.com/exdb/mnist/) dataset.
 
 ### Data Format and Preprocessing
 
-The original data was downloaded and preprocessed (28x28 images flattened to 784-dimensional vectors and targets were [one-hot](https://en.wikipedia.org/wiki/One-hot#Machine_learning_and_statistics) encoded) before being saved as a [compressed `.npz`](https://numpy.org/doc/stable/reference/generated/numpy.savez_compressed.html) file. If you wish to use the preprocessed data, download [`data.npz`](src/example/data.npz) and extract the NumPy arrays as shown in [`mnist.py`](src/example/mnist.py).
+The original data was downloaded and preprocessed (28x28 images flattened to 784-dimensional vectors and targets were [one-hot](https://en.wikipedia.org/wiki/One-hot#Machine_learning_and_statistics) encoded) before being saved as a [compressed `.npz`](https://numpy.org/doc/stable/reference/generated/numpy.savez_compressed.html) file. If you wish to use the preprocessed data, download [`data.npz`](example/data.npz) and extract the NumPy arrays as shown in [`mnist.py`](example/mnist.py).
 
 ### Network Architecture
 
@@ -73,7 +73,7 @@ In terms of network architecture, the example uses a single hidden layer with 20
 
 ### Model Performance
 
-After training the model for about 15 epochs (which took about an hour or so on my laptop), I was able to achieve parameters for the network that resulted in 97.67% accuracy for the training set and 96.57% accuracy for the test set (a cross-validation set was not used for simplicity). These parameters can be found in [`parameters.npz`](src/example/parameters.npz) and the commented-out code in [`mnist.py`](src/example/mnist.py) shows how they can be loaded into the model.
+After training the model for about 15 epochs (which took about an hour or so on my laptop), I was able to achieve parameters for the network that resulted in 97.67% accuracy for the training set and 96.57% accuracy for the test set (a cross-validation set was not used for simplicity). These parameters can be found in [`parameters.npz`](example/parameters.npz) and the commented-out code in [`mnist.py`](example/mnist.py) shows how they can be loaded into the model.
 
 Unfortunately, 97% accuracy pales in comparison to the most optimized models, which score upwards of 99.5% in accuracy. Even the short script on the [TensorFlow home page](https://www.tensorflow.org/) can achieve similar if not slightly better results after only a few minutes of training:
 
